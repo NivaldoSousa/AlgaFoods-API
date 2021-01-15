@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Objects;
-@JsonRootName("gastronomia")
 @Data // essa antaçao do lombok possui anotaçoes já inclusas como: @Getter, @Setter, @ToString, @EqualsAndHashCode
 @EqualsAndHashCode(onlyExplicitlyIncluded = true) /*essa propriedade do EqualsAndHashCode diz que somente atributo
 que for escolher explicitamente sera incluso */
@@ -19,8 +18,7 @@ public class Cozinha {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @JsonProperty("titulo")
+    
     private String nome;
 
 }
