@@ -9,7 +9,7 @@ public interface CozinhaRepository {
     List<Cozinha> listar();
     Cozinha buscar(Long id);
     Cozinha salvar(Cozinha cozinha);
-    void remover(Cozinha cozinha);
+    void remover(Long id);
 }
 
 /*Um repository é uma camada onde podemos chamar os principais metodos com salvar,editar,deletar e buscar e entre outros

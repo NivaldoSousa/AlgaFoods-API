@@ -1,12 +1,12 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
+import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +56,7 @@ public class CozinhaController {
             //esse metodo BeanUtils faz a mesma coisa passando os valores de uma variavel para outra
             // a propriedade id nao esta sendo copiada
             BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
-            cozinhaRepository.salvar(cozinhaAtual);
+          cozinhaAtual = cadastroCozinha.salvar(cozinhaAtual);
             return ResponseEntity.ok(cozinhaAtual);
         }
         return ResponseEntity.notFound().build(); // nao encontrado
@@ -67,15 +67,13 @@ public class CozinhaController {
         //O tryCatch serve para capturar exeçao caso o cliente tente excluir algo que viole as regras do banco, como
         // por exemplo relacionamento entre entidades
         try {
-            Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
+            cadastroCozinha.excluir(cozinhaId);
+            return ResponseEntity.noContent().build(); // nao ira retorna nada, somente sera excluido com suscesso
 
-            if (cozinha != null) {
-                cozinhaRepository.remover(cozinha);
-
-                return ResponseEntity.noContent().build(); // nao ira retorna nada, somente sera excluido com suscesso
-            }
+        } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.notFound().build(); // nao encontrado
-        } catch (DataIntegrityViolationException e) {
+
+        } catch (EntidadeEmUsoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build(); //Retorna um erro de conflito
         }
     }
