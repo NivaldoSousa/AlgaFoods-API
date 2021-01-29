@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cozinhas")
@@ -26,19 +27,19 @@ public class CozinhaController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Cozinha> listar() {
-        return cozinhaRepository.listar();
+        return cozinhaRepository.findAll();
     }
 
     @GetMapping("/{cozinhaId}")
     public ResponseEntity<Cozinha> buscar(@PathVariable Long cozinhaId) {
-        Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
+        Optional<Cozinha> cozinha = cozinhaRepository.findById(cozinhaId);
 
-        //dando resposta do cliente quando a requisiçao foi feita com sucesso porem sem dados obtidos
-        if (cozinha != null) {
-            return ResponseEntity.ok(cozinha);
+        //verifica se tem conteudo na variavel cozinha, pois utilizando o Optional nunca retorna null
+        if (cozinha.isPresent()) {
+            return ResponseEntity.ok(cozinha.get()); // sempre que usar o optional chama o get() da variavel pra obter o valor
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        //ou return ResponseEntity.ok(cozinha);
+
     }
 
     @PostMapping
@@ -49,15 +50,14 @@ public class CozinhaController {
 
     @PutMapping("/{cozinhaId}")
     public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
-        Cozinha cozinhaAtual = cozinhaRepository.buscar(cozinhaId);
-        //cozinhaAtual.setNome(cozinha.getNome()); atribuindo os valores vindo da cozinha e passando para cozinhaAtual
+        Optional<Cozinha> cozinhaAtual = cozinhaRepository.findById(cozinhaId);
 
-        if (cozinhaAtual != null) {
+        if (cozinhaAtual.isPresent()) {
             //esse metodo BeanUtils faz a mesma coisa passando os valores de uma variavel para outra
             // a propriedade id nao esta sendo copiada
-            BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
-          cozinhaAtual = cadastroCozinha.salvar(cozinhaAtual);
-            return ResponseEntity.ok(cozinhaAtual);
+            BeanUtils.copyProperties(cozinha, cozinhaAtual.get(), "id");
+          Cozinha cozinhaSalva = cadastroCozinha.salvar(cozinhaAtual.get());
+            return ResponseEntity.ok(cozinhaSalva);
         }
         return ResponseEntity.notFound().build(); // nao encontrado
     }

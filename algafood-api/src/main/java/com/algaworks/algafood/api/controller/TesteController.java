@@ -19,9 +19,9 @@ public class TesteController {
 
     //@RequestParam é o parametro que vai ser passado pelo usuario
     //"nome" é o parametro vai ser atribuido ao JPQL da query
-    @GetMapping("/cozinhas/por-nome")
+   /* @GetMapping("/cozinhas/por-nome")
     public List<Cozinha> cozinhasPorNome(@RequestParam("nome") String nome){
         return cozinhaRepository.consultarPorNome(nome);
-    }
+    }*/
 
 }
