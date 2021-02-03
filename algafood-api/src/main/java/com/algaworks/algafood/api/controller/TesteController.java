@@ -26,28 +26,33 @@ public class TesteController {
 
     //@RequestParam é o parametro que vai ser passado pelo usuario
     //"nome" é o parametro vai ser atribuido ao JPQL da query
-   @GetMapping("/cozinhas/por-nome")
-    public List<Cozinha> cozinhasPorNome(@RequestParam("nome") String nome){
+    @GetMapping("/cozinhas/por-nome")
+    public List<Cozinha> cozinhasPorNome(@RequestParam("nome") String nome) {
         return cozinhaRepository.findTodasByNomeContaining(nome);
     }
 
     @GetMapping("/restaurantes/por-nome")
-    public List<Restaurante> restaurantePorNome(String nome, Long cozinhaId){
+    public List<Restaurante> restaurantePorNome(String nome, Long cozinhaId) {
         return restauranteRepository.consultarPorNome(nome, cozinhaId);
     }
 
     @GetMapping("/restaurantes/por-taxa-frete")
-    public List<Restaurante> restaurantePorTaxaFrete(Double taxaInicial, Double taxaFinal){
+    public List<Restaurante> restaurantePorTaxaFrete(Double taxaInicial, Double taxaFinal) {
         return restauranteRepository.findByTaxaFreteBetween(taxaInicial, taxaFinal);
     }
 
     @GetMapping("/restaurantes/primeiro-por-nome")
-    public Optional<Restaurante> restaurantePornome(String nome){
+    public Optional<Restaurante> restaurantePornome(String nome) {
         return restauranteRepository.findFirstRestauranteByNomeContaining(nome);
     }
 
     @GetMapping("/restaurantes/top2-por-nome")
-    public List<Restaurante> restaurantePorTop2(String nome){
+    public List<Restaurante> restaurantePorTop2(String nome) {
         return restauranteRepository.findTop2ByNomeContaining(nome);
     }
-}
+
+    @GetMapping("/restaurantes/por-nome-frete")
+        public List<Restaurante> restaurantesPorNomesFrete (String nome, Double taxaFreteInicial, Double taxaFreteFinal){
+        return restauranteRepository.find(nome, taxaFreteInicial, taxaFreteFinal);
+        }
+    }
