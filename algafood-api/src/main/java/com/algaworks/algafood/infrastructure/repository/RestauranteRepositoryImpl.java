@@ -3,9 +3,14 @@ package com.algaworks.algafood.infrastructure.repository;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.RestauranteRepositoryQueries;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import java.util.HashMap;
 import java.util.List;
 
 @Repository
@@ -15,11 +20,12 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
     private EntityManager manager;
 
     public List<Restaurante> find(String nome, Double taxaFreteInicial, Double taxaFreteFinal) {
-        var jpql = "from Restaurante where nome like :nome" + "and taxaFrete between :taxaInicial and :taxaFinal";
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
 
-        return manager.createQuery(jpql, Restaurante.class).setParameter("nome", "%" + nome + "%")
-                .setParameter("taxaInicial", taxaFreteInicial)
-                .setParameter("taxaFinal", taxaFreteFinal)
-                .getResultList();
+        CriteriaQuery<Restaurante> criteria = builder.createQuery(Restaurante.class);
+        criteria.from(Restaurante.class);
+
+        TypedQuery<Restaurante> query = manager.createQuery(criteria);
+        return query.getResultList();
     }
 }
