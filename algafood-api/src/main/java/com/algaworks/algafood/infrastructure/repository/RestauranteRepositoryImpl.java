@@ -10,7 +10,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import java.util.HashMap;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -23,7 +25,27 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
         CriteriaBuilder builder = manager.getCriteriaBuilder();
 
         CriteriaQuery<Restaurante> criteria = builder.createQuery(Restaurante.class);
-        criteria.from(Restaurante.class);
+        Root<Restaurante> root = criteria.from(Restaurante.class);
+
+        var predicate = new ArrayList<Predicate>();
+
+        //Se tiver nome
+        if (StringUtils.hasText(nome)) {
+            predicate.add(builder.like(root.get("nome"), "%" + nome + "%"));
+        }
+
+        if(taxaFreteInicial != null) {
+            //greaterThanOrEqualTo significa que taxaFrete tem que ser maior ou igual a taxaFreteInicial
+            predicate.add(builder.greaterThanOrEqualTo(root.get("taxaFrete"), taxaFreteInicial));
+        }
+
+        if(taxaFreteFinal != null) {
+            //lessThanOrEqualTo significa que taxaFrete tem que ser menor ou igual a taxaFreteFinal
+            predicate.add(builder.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal));
+        }
+
+        //converter um list em um array
+        criteria.where(predicate.toArray(new Predicate[0]));
 
         TypedQuery<Restaurante> query = manager.createQuery(criteria);
         return query.getResultList();
