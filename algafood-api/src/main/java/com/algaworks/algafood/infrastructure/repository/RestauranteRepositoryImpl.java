@@ -1,7 +1,11 @@
 package com.algaworks.algafood.infrastructure.repository;
 
 import com.algaworks.algafood.domain.model.Restaurante;
+import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.domain.repository.RestauranteRepositoryQueries;
+import com.algaworks.algafood.infrastructure.repository.spec.RestaurantesSpecs;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -21,6 +25,10 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
     @PersistenceContext
     private EntityManager manager;
 
+    @Autowired
+    @Lazy
+    private RestauranteRepository restauranteRepository;
+
     public List<Restaurante> find(String nome, Double taxaFreteInicial, Double taxaFreteFinal) {
         CriteriaBuilder builder = manager.getCriteriaBuilder();
 
@@ -34,12 +42,12 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
             predicate.add(builder.like(root.get("nome"), "%" + nome + "%"));
         }
 
-        if(taxaFreteInicial != null) {
+        if (taxaFreteInicial != null) {
             //greaterThanOrEqualTo significa que taxaFrete tem que ser maior ou igual a taxaFreteInicial
             predicate.add(builder.greaterThanOrEqualTo(root.get("taxaFrete"), taxaFreteInicial));
         }
 
-        if(taxaFreteFinal != null) {
+        if (taxaFreteFinal != null) {
             //lessThanOrEqualTo significa que taxaFrete tem que ser menor ou igual a taxaFreteFinal
             predicate.add(builder.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal));
         }
@@ -50,4 +58,12 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
         TypedQuery<Restaurante> query = manager.createQuery(criteria);
         return query.getResultList();
     }
+
+    @Override
+    public List<Restaurante> findComFreteGratis(String nome) {
+        return restauranteRepository.findAll(RestaurantesSpecs.comFreteGratis()
+                .and(RestaurantesSpecs.comNomeSemelhante(nome)));
+    }
+
+
 }
