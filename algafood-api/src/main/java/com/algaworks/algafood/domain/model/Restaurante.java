@@ -1,5 +1,6 @@
 package com.algaworks.algafood.domain.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -30,7 +35,7 @@ public class Restaurante {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotNull
+	@Column(nullable = false)
 	private String nome;
 
 	@Column(name = "taxa_frete", nullable = false)
@@ -50,4 +55,16 @@ public class Restaurante {
 	joinColumns = @JoinColumn(name = "restaurante_id"), 
 	inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
 	private List<FormaPagamento> formasPagamento = new ArrayList<>();
+	
+	@CreationTimestamp // Na hora de salvar a entidade com essa anotaçao do hibernate, ele ira criar data e hora atual para ser salvo no banco
+	@Column(nullable = false)
+	private LocalDateTime dataCadastro;
+	
+	@UpdateTimestamp //com essa anotaçao do hibernate sempre que a entidade for atualizada ela ira fazer um update da data e hora atual
+	@Column(nullable = false)
+	private LocalDateTime dataAtualizacao;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "restaurante")
+	private List<Produto> produtos = new ArrayList<>();
 }
