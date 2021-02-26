@@ -70,8 +70,8 @@ public class CozinhaController {
             cadastroCozinha.excluir(cozinhaId);
             return ResponseEntity.noContent().build(); // nao ira retorna nada, somente sera excluido com suscesso
 
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.notFound().build(); // nao encontrado
+       // } catch (EntidadeNaoEncontradaException e) {
+         //   return ResponseEntity.notFound().build(); // nao encontrado
 
         } catch (EntidadeEmUsoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build(); //Retorna um erro de conflito
