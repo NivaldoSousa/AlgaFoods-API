@@ -1,19 +1,28 @@
 package com.algaworks.algafood.api.controller;
 
-import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
-import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
-import com.algaworks.algafood.domain.model.Cozinha;
-import com.algaworks.algafood.domain.repository.CozinhaRepository;
-import com.algaworks.algafood.domain.service.CadastroCozinhaService;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Optional;
+import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.algaworks.algafood.domain.model.Cozinha;
+import com.algaworks.algafood.domain.repository.CozinhaRepository;
+import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 
 @RestController
 @RequestMapping("/cozinhas")
@@ -31,15 +40,10 @@ public class CozinhaController {
     }
 
     @GetMapping("/{cozinhaId}")
-    public ResponseEntity<Cozinha> buscar(@PathVariable Long cozinhaId) {
-        Optional<Cozinha> cozinha = cozinhaRepository.findById(cozinhaId);
-
-        //verifica se tem conteudo na variavel cozinha, pois utilizando o Optional nunca retorna null
-        if (cozinha.isPresent()) {
-            return ResponseEntity.ok(cozinha.get()); // sempre que usar o optional chama o get() da variavel pra obter o valor
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
+    public Cozinha buscar(@PathVariable Long cozinhaId) {
+    	return cadastroCozinha.buscarOuFalhar(cozinhaId);
+    	//orElseThrow serve para retorna caso tenha uma cozinha, ou lançar a ex.
+    	
     }
 
     @PostMapping
@@ -49,32 +53,19 @@ public class CozinhaController {
     }
 
     @PutMapping("/{cozinhaId}")
-    public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
-        Optional<Cozinha> cozinhaAtual = cozinhaRepository.findById(cozinhaId);
+    public Cozinha atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
+        Cozinha cozinhaAtual = cadastroCozinha.buscarOuFalhar(cozinhaId);
 
-        if (cozinhaAtual.isPresent()) {
-            //esse metodo BeanUtils faz a mesma coisa passando os valores de uma variavel para outra
+             //esse metodo BeanUtils faz a mesma coisa passando os valores de uma variavel para outra
             // a propriedade id nao esta sendo copiada
-            BeanUtils.copyProperties(cozinha, cozinhaAtual.get(), "id");
-          Cozinha cozinhaSalva = cadastroCozinha.salvar(cozinhaAtual.get());
-            return ResponseEntity.ok(cozinhaSalva);
-        }
-        return ResponseEntity.notFound().build(); // nao encontrado
+				BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
+				return cadastroCozinha.salvar(cozinhaAtual);
     }
 
-    @DeleteMapping("/{cozinhaId}")
-    public ResponseEntity<Cozinha> remover(@PathVariable Long cozinhaId) {
-        //O tryCatch serve para capturar exeçao caso o cliente tente excluir algo que viole as regras do banco, como
-        // por exemplo relacionamento entre entidades
-        try {
-            cadastroCozinha.excluir(cozinhaId);
-            return ResponseEntity.noContent().build(); // nao ira retorna nada, somente sera excluido com suscesso
-
-       // } catch (EntidadeNaoEncontradaException e) {
-         //   return ResponseEntity.notFound().build(); // nao encontrado
-
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build(); //Retorna um erro de conflito
-        }
-    }
+  //Exemplo 2 de delete 
+	@DeleteMapping("/{cozinhaId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT) // Essa anotaçao serve caso de erro ira retorna erro 404
+	public void remover(@PathVariable Long cozinhaId) {
+		cadastroCozinha.excluir(cozinhaId);
+	}
 }
