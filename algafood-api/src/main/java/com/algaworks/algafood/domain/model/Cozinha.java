@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,7 +19,8 @@ que for escolher explicitamente sera incluso */
 @Entity
 public class Cozinha {
 
-    @EqualsAndHashCode.Include // deixando o atributo explicitamente incluso.
+    @NotNull
+	@EqualsAndHashCode.Include // deixando o atributo explicitamente incluso.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
