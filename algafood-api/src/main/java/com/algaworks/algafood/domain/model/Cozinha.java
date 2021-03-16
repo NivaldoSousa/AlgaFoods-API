@@ -7,8 +7,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.algaworks.algafood.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -19,12 +21,13 @@ que for escolher explicitamente sera incluso */
 @Entity
 public class Cozinha {
 
-    @NotNull
+    @NotNull(groups = Groups.CozinhaId.class)
 	@EqualsAndHashCode.Include // deixando o atributo explicitamente incluso.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String nome;
 
     @JsonIgnore
