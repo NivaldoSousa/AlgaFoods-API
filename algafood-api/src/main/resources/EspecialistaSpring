@@ -1,0 +1,1594 @@
+O que é JPA e Hibernate?
+
+ORM significa mapeamento objeto-relacional que significa facilitar o trabalho do desenvolvedor de fazer inserts e pesquisar no banco de dados.
+
+JPA é uma especificação Java EE para uma soluçao ORM para persistencia de dados com ela temos uma API de consulta e persistencia de dados, 
+com ela usamos anotaçoes com @Entity, @Table, @Column e entre outros
+
+Hibernate é uma implementaçao da especificaçao do JPA
+
+
+________________________________________________________________________________________________________________________________________________________________
+
+JUnit
+
+O que é teste unitario?
+Basicamente e testa a entrada e a saida de um sistema, validando os dados inseridos.
+
+@Test e anotaçao onde indica que aquele metodo e um teste
+@Before é sempre chamado antes de um teste ser realizado
+@After é p que é realizado por fim de cada teste.
+
+Assertivas sao utilizadas para comparar os valores esperados com os recebidos.
+AssertEquals: verifica se os valores sao iguais.
+AssertNotEquals: verifica se os valores sao diferentes.
+AssertNull: verifica se o valor passado é null.
+AssertNotNull:Verifica se o valor passado não é nulo.
+
+Entre outras assert
+
+________________________________________________________________________________________________________________________________________________________________
+
+Metodologia Scrum
+
+O que é scrum?
+busca promover maneiras de alcançar otimos resultados de produtividade atraves do gerenciamento de tarefas e projetos, ajudando a equipe
+a realizarem projetos de maneira fluida, dinamica e rapida.
+
+Scrum Master (Facilitador)
+ Líder da equipe
+ Tem a função é remover impedimentos para que a equipe atinja os objetivos
+
+Team
+ Responsável por entregar o produto
+
+
+Tipos de reuniao: Planning onde sao apresentados as tarefas e estimativa dos mesmos para inciar a sprint
+                  Daily onde temos uma rapida reuniao precisamente 15 minutos onde os devs informam o andamento das tarefas se caso houver sao apontados impedimentos, 
+				  Reviews onde todas as terefas da sprint sao apresentas para o P.O para fazer um overview de tudo, e dizer o desempenho do time nessa sprint
+
+________________________________________________________________________________________________________________________________________________________________
+
+O que significa extender de uma classe?
+
+Usa-se implements quando você deseja implementar uma interface. Não implementa-se classes. Implementa-se apenas interfaces. 
+Uma interface "firma um contrato" entre classes em que define comportamentos (métodos) que devem ser sobrescritos pela classe que os herda (se essa for uma classe concreta).
+
+_____________________________________________________________________________________________________________________________________________________________
+
+O que significa extender de uma classe?
+
+Usa-se extends quando você deseja aplicar herança á sua classe. 
+Quando falamos que a classe A estende a classe B , significa que A herda alguns (ou todos) métodos e atributos da classe B
+__________________________________________________________________________________________________________________________________________________________________
+
+Qual a diferença entre extends e implements Java?
+
+Ambas as palavras-chave são usadas ao criar sua própria nova classe na linguagem Java. 
+Diferença: 
+- implements significa que você está usando os elementos de uma interface Java em sua classe. 
+- extends significa que você está criando uma subclasse da classe base que está estendendo.
+
+__________________________________________________________________________________________________________________________________________________________________
+
+O que é uma estrutura de dados?
+
+Uma sequência de passos computacionais que transforma uma entrada em uma saída previamente determinada. 
+O meio para armazenar e organizar dados com o objetivo de facilitar o acesso e as modificações.
+
+__________________________________________________________________________________________________________________________________________________________________
+
+Aula 2.20 Mudando o comportamento da aplicaçao com Sring Profiles
+
+A anotaçao @Profile serve para apontar qual tipo de perfil o spring devera usar, onde voce podera
+criar tipos de perfis.
+exemplo: 'dev' e 'prod', nesse exemplo foi criado dois ambientes do mesmo projeto um de produção e outro para desenvolvimento,
+igual o projeto da Lev Bicicleta
+Uma das formas de ser definir um perfil para o ambiente na hora da compilaçao
+é no aplication.properties onde vc anota e qual perfil o spring deve usar
+exemplo: spring.profiles.active=prod
+__________________________________________________________________________________________________________________________________________________________________
+
+
+Aula 2.21 Criando métodos de callback do ciclo de vida dos beans
+
+Você pode criar ciclos de vida dos Beans, com metodos definindo seu inicio e o fim da execução
+exemplo:
+
+@PostConstruct ==> esse método inicia o método
+public void init(){
+Sustem.out.println("INIT" + NOTIFICADOR);
+}
+
+
+@PreDestroy ==> esse método destrói o método antes da execuçao
+public void destroy(){
+Sustem.out.println("DESTROY" + NOTIFICADOR);
+}
+__________________________________________________________________________________________________________________________________________________________________
+
+Aula 3.13 Conhecendo o padrao Aggregate do DDD
+
+Padrao Aggregate do DDD e um grupo de objetos de dominio que sao tratados como uma unidade unica.
+
+___________________________________________________________________________________________________________________________________________________________________
+
+
+Aula 4.5 Conhecendo o protocolo HTTP
+
+COMPOSIÇAO DA REQUISIÇAO
+
+[METODO] [URI] HTTP/[VERSAO]   ================ >     POST/produtos HTTP/1.1
+
+[Cabeçalhos]                   ================ >     Content-Type: application/json
+                                                      Accept: application/json
+
+[CORPO/PAYLOAD]                ================ >    {
+                                                       "nome": "Notebook i7",
+											           "preco": 2100.0
+											         }
+METODO = POST
+URI = prosutos
+VERSAO = 1.1
+
+__________________________________________________________________________________________________________________________________________________________________
+
+
+Aula 4.9 Identificando recursos Rest
+
+URI ===> Uniform Resource Identifier (Identificador de Recurso Uniforme)
+Objetivo dele e dá uma especie de endereço para os recursos de forma nao ambigua.
+
+URL ===> Uniform Resource Location (Indetificador de Recurso de Localizaçao)
+
+OBS: URI x URL sao as mesmas coisas a URL e um tipo de URI sendo que a URL alem de ela envia seus endereços de recursos e tambem da uma localizaçao.
+
+__________________________________________________________________________________________________________________________________________________________________
+
+Aula 4.13 Implementando content negotiation para retornar JSON ou XML
+
+content negotiation nada mais é que voce especificar qual tipo de dado seu metodo vai retornar
+como por exemplo, especificar se vai retorna uma reposta em JSON, XML ou ambos
+
+exemplo:
+
+@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Cozinha> listar(){
+        return cozinhaRepository.listar();
+    }
+
+O MediaType define qual tipo de resposta ira retornar.
+
+__________________________________________________________________________________________________________________________________________________________________
+
+Aula 4.13 Consultando Singleton Resource com GET e @PathVariable
+
+O @PathVariable nada mais é que voce definir um caminho o tipo de dado que ira
+ser o parametro na hora de fazer as requisiçoes
+
+Exemplo:
+
+ @GetMapping("/{cozinhaId}") => aui voce pode mapear o caminho sem a necessidade do @RequestMapping
+    public Cozinha buscar(@PathVariable("cozinhaId")Long id){
+        return cozinhaRepository.buscar(id);
+    }
+	
+O @PathVariable esta dizendo que o parametro do GetMapping ira receber um valor do tipo Long
+como no exemplo Long id.
+
+__________________________________________________________________________________________________________________________________________________________________
+
+Aula 4.15. Customizando as representações XML e JSON com @JsonIgnore, @JsonProperty e @JsonRootName
+
+@JsonProperty => Serve para troca o nome da model, com a finalidade de na hora da requisiçao aparecer com outro nome por exemplo:
+
+Classe
+
+public class Cozinha{
+
+private Long id;
+
+  @JsonProperty("titulo")
+    private String nome;
+{
+
+na hora de fazer uma requisiçao utilizando o Postman por exemplo:
+ira obter o valor da sua requisiçao com o nome do atributo substituido pelo nome que foi dado ao @JsonProperty;
+exemplo:
+
+[
+    {
+        "id": 1,
+        "titulo": "Brasileira"
+    },
+    {
+        "id": 2,
+        "titulo": "Indiana"
+    }
+]
+
+@JsonIgnore => Serve para remover o atributo, ou seja, qualquer requisiçao em que algum atributo esteja com essa anotação
+nao ira ter valor e nem sera representado.
+
+exemplo:
+
+public class Cozinha {
+
+    private Long id;
+
+    @JsonIgnore
+    private String nome;
+
+}
+
+
+@JsonRootName => Serve pra alterar o nome da classe, mudando sua representação na hora das requisições
+Exemplo:
+
+@JsonRootName("gastronomia")
+public class Cozinha {
+
+    private Long id;
+
+    @JsonIgnore
+    private String nome;
+
+}
+
+__________________________________________________________________________________________________________________________________________________________________
+
+
+Aula 4.17 Conhecendo os metodos HTTP
+
+GET
+
+EXEMPLO:
+
+REQUISIÇAO                                            RESPOSTA
+GET / cozinhas HTTTP/ 1.1                             HTTP/1.1 200 OK
+                                                     {
+													  "codigo": 10,
+													  "nome": "Brasileira"
+													 }
+													 
+POST
+
+EXEMPLO:
+
+REQUISIÇAO                                            RESPOSTA
+POST / cozinhas HTTTP/ 1.1                            HTTP/1.1 201 Created
+{                                                    {
+"nome": "Portuguesa"			                      "codigo": 11,
+}													  "nome": "Portuguesa"
+													 }
+													 
+PUT
+
+EXEMPLO:
+
+REQUISIÇAO                                            RESPOSTA
+PUT / cozinhas/11 HTTTP/ 1.1                          HTTP/1.1 201 Created
+{                                                    {
+"nome": "Mineira"			                          "codigo": 11,
+}													  "nome": "Mineira"
+													 }		
+DELETE
+
+EXEMPLO:
+
+REQUISIÇAO                                            RESPOSTA
+DELETE / cozinhas/11 HTTTP/ 1.1                          HTTP/1.1 204 NO CONTENT
+
+__________________________________________________________________________________________________________________________________________________________________
+
+Aula 4.18 Conhecendo os codigos de status HTTP
+
+Status do HTTP - nivel 200
+significa que a requisiçao foi sucesso
+
+Status do HTTP - nivel 201
+significa que a requisiçao foi sucesso na hora que um objeto e criado
+
+Status do HTTP - nivel 204
+significa que a requisiçao foi sucesso na hora que uma exclusao e feita por exemplo.
+
+
+Status do HTTP - nivel 300
+significa que a requisiçao do endereço foi feita para um redirecionamento.
+
+Status do HTTP - nivel 301
+significa que a requisiçao do endereço foi movida permanentimente.
+
+Status do HTTP - nivel 302
+significa que a requisiçao do endereço foi alterado permanentimente.
+
+
+Status do HTTP - nivel 400
+significa que a requisiçao teve um erro por parte do cliente.
+
+Status do HTTP - nivel 401
+significa que a requisiçao nao foi autorizada por parte do cliente pois ele nao esta autenticado.
+
+Status do HTTP - nivel 402
+significa que a requisiçao foi proibida por parte do cliente pois ele nao esta autorizado.
+
+Status do HTTP - nivel 404
+significa que a requisiçao nao foi encontrada.
+
+Status do HTTP - nivel 405
+significa que o verbo do HTTP nao e suportado pelo recurso, exemplo: o cliente usa um metodo DELETE mas a api nao pode excluir esse metodo e retornado.
+
+Status do HTTP - nivel 406
+significa que quando a midia-type nao e suportado, exemplo: a requisiçao manda um JSON mas api esta esperando um XML, esse erro que irá retorna.
+
+
+Status do HTTP - nivel 500
+significa erro no servidor.
+
+Status do HTTP - nivel 503
+significa que o servidor esta com os serviços indisponivel.
+
+__________________________________________________________________________________________________________________________________________________________________
+
+Aula 4.19 Definindo o status da resposta HTTP com @ResponseStatus
+
+Exemplo:
+
+@ResponseStatus(HttpStatus.CREATED) => ele ira informa na resposta da requisiçao Status 201
+@GetMapping("/{cozinhaId}")
+    public Cozinha buscar(@PathVariable("cozinhaId")Long id){
+        return cozinhaRepository.buscar(id);
+    }
+
+Obs. nao leve em consideraçao o metodo é so um exemplo de como funciona a anotação.
+
+__________________________________________________________________________________________________________________________________________________________________
+
+Aula 4.25 Modelando e Implementando a atualização de recursos com PUT
+
+Exemplo:
+
+ @PutMapping("/{cozinhaId}")
+    public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
+        Cozinha cozinhaAtual = cozinhaRepository.buscar(cozinhaId);
+        
+		//atribuindo os valores vindo da cozinha e passando para cozinhaAtual, so que com muito atributos teria que passar um por um
+		//cozinhaAtual.setNome(cozinha.getNome()); 
+        //conzinhaAtual.setEndereco(cozinha.getEndereco());
+
+        if (cozinhaAtual != null) {
+           
+		   //esse metodo BeanUtils faz a mesma coisa passando os valores de uma variavel para outra
+            // a propriedade "id" nao esta sendo copiada
+            BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
+            
+			cozinhaRepository.salvar(cozinhaAtual);
+            return ResponseEntity.ok(cozinhaAtual);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+____________________________________________________________________________________________________________________________________________________________________________
+
+Aula 4.26 Modelando e implementando exclusao de recursos com DELETE
+
+Exemplo:
+
+ @DeleteMapping("/{cozinhaId}")
+    public ResponseEntity<Cozinha> remover(@PathVariable Long cozinhaId) {
+        //O tryCatch serve para capturar exeçao caso o cliente tente excluir algo que viole as regras do banco, como
+        // por exemplo relacionamento entre entidades
+        try {
+            Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
+
+            if (cozinha != null) {
+                cozinhaRepository.remover(cozinha);
+
+                return ResponseEntity.noContent().build(); // nao ira retorna nada, somente sera excluido com suscesso
+            }
+            return ResponseEntity.notFound().build(); // nao encontrado
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build(); //Retorna um erro de conflito
+        }
+    }
+
+___________________________________________________________________________________________________________________________________________________________________		
+
+4.34 Finalizando a atualização parcial com a API de Reflections do Spring
+
+ @PatchMapping("/{restauranteId}")
+    public ResponseEntity<?> atualizarParcial(@PathVariable Long restauranteId, @RequestBody Map<String, Object> campos) {
+
+        Restaurante restauranteAtual = restauranteRepository.buscar(restauranteId);
+
+        if (restauranteAtual == null) {
+            return ResponseEntity.notFound().build();
+        }
+        merge(campos, restauranteAtual);
+        return atualizar(restauranteId, restauranteAtual);
+    }
+
+    private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino) {
+        
+		//Converte dados em json ou Java, vice-versa
+        ObjectMapper objectMapper = new ObjectMapper();
+        Restaurante restauranteOrigem = objectMapper.convertValue(dadosOrigem, Restaurante.class);
+
+        dadosOrigem.forEach((nomePropriedade, valorPropriedade) ->{
+            Field field = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
+            field.setAccessible(true);
+
+            Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
+
+            ReflectionUtils.setField(field, restauranteDestino, novoValor);
+        });
+    }
+___________________________________________________________________________________________________________________________________________________________________			 
+
+4.35 Introdução ao modelo de maturidade de Richardson(RMM)
+
+Nivel 0 = POX (Nao pode ser considerada Rest)
+
+Nivel 1 = Recursos (Nao pode ser considerada Rest)
+
+Nivel 2 = Verbos HTTP (Os mais utilizados entre as empresas e que pode ser considerada Rest)
+
+Nivel 3 = HEATEOAS (Considerada GLORIA DO REST) 
+___________________________________________________________________________________________________________________________________________________________________
+
+4.36 Conhecendo o nivel 0 do RMM
+
+Nivel 0 - POX (Plain Old XML)
+
+É UM NIVEL RUDMENTAR ONDE SOMENTE SO E UTILIZADO 1 END-POINT
+COMO POR EXEMPLO E USADO O POST TANTO PARA CADASTRA COMO PARA EDITAR UM DETERMINADO OBJETO
+
+ISSO TAMBEM VALE PRA RESPOSTA HTTP ONDE O MESMO CODIGO HTTP DE RESPOSTA TANTO VALE CODIGO 200 PARA SUCESSO, COMO PARA NÃO ENCONTRADO.
+
+___________________________________________________________________________________________________________________________________________________________________
+
+4.37 conhecendo o nivel 1 do RMM
+
+Ainda nao e considerado um sistema Rest pois a requisiçao nao usa os verbos HTTP corretamente, porem pode haver mais de um end-point.
+
+___________________________________________________________________________________________________________________________________________________________________
+
+4.38 conhecendo o nivel 2 do RMM
+
+Esse sim pode ser considerado um sistema Rest pois esta utilizando os verbos HTTP corretamente e os End-Point para cada verbo HTTP.
+E as respostas HTTP tambem sao usadas corretamente. 
+___________________________________________________________________________________________________________________________________________________________________
+
+4.39 Conhecendo o nivel 3 do RMM
+
+Conhecido com Hyper Midia ele satifaz todos os requisitos para uma API ser totalmente RESTfull
+___________________________________________________________________________________________________________________________________________________________________
+
+5.1 Implementando consultas JPQL em repositorios
+
+Exemplo de como fazer uma consulta JPQL 
+
+Classe CozinhaRepositoryImpl
+
+//Metodo JPQL para consulta
+    @Override
+    public List<Cozinha> consultarPorNome(String nome){
+        return manager.createQuery("from Cozinha where nome like :nome", Cozinha.class)
+                .setParameter("nome","%" + nome + "%").getResultList();
+    }
+	
+Classe CozinhaRepository
+
+List<Cozinha> consultarPorNome(String nome);
+
+Classe TesteController
+
+@Autowired
+    private CozinhaRepository cozinhaRepository;
+
+    //@RequestParam é o parametro que vai ser passado pelo usuario
+    //"nome" é o parametro vai ser atribuido ao JPQL da query
+    @GetMapping("/cozinhas/por-nome")
+    public List<Cozinha> cozinhasPorNome(@RequestParam("nome") String nome){
+        return cozinhaRepository.consultarPorNome(nome);
+    }
+
+Para fazer teste no Postman utiliza a URL
+
+http://localhost:8080/teste/cozinhas/por-nome?nome=a
+
+onde ?nome=a significa o paramentro que sera mandado para o end-point. ?nome ==>Tipo de paramentro de filtro da pesquisa
+                                                                        =a ==> Valor do paramentro
+
+___________________________________________________________________________________________________________________________________________________________________
+
+5.4 Refatorando o codigo do projeto para usar o repositorio do SDJ
+
+* O Optional e usado sempre que vc utiliza o findById pois ele retonar um tipo Optional e o mesmo serve para evitar que de erro de NullExeption, dessa
+forma o proprio Optional ja faz um tratamento para nao quebrar o codigo.
+
+@GetMapping("/{cozinhaId}")
+    public ResponseEntity<Cozinha> buscar(@PathVariable Long cozinhaId) {
+        Optional<Cozinha> cozinha = cozinhaRepository.findById(cozinhaId);
+
+        //verifica se tem conteudo na variavel cozinha, pois utilizando o Optional nunca retorna null
+        if (cozinha.isPresent()) {
+            return ResponseEntity.ok(cozinha.get()); // sempre que usar o optional chama o get() da variavel pra obter o valor
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        
+    }
+
+// Forma de salvar utilizando findById sem que seja necessario um Optional	
+	public Restaurante salvar(Restaurante restaurante) {
+
+        Long cozinhaId = restaurante.getCozinha().getId();
+        
+		Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Não existe cadastro de cozinha com código %d", cozinhaId)));
+        //Como o findById retorna um Optional o metodo orElseThrow ele busca o conteudo do Optional e verifica se tem
+        //conteudo, caso nao tenha ele lança o Execption que foi criado, caso tenha ele retorna um objeto no caso (cozinha).
+        
+		restaurante.setCozinha(cozinha);
+        return restauranteRepository.salvar(restaurante);
+    }
+___________________________________________________________________________________________________________________________________________________________________
+
+Aula 5.7 Usuando as Keywords para definir criterios de query methods
+
+Existe algumas palavras chaves que pode ser utililizando para fazer criterios de busca com JPA, o Containing e uma delas, ele serve 
+para a colocaçao do % tanto no inicio como no final da propriedade 
+
+public interface CozinhaRepository extends JpaRepository<Cozinha, Long> {
+
+    //Containing significa que esse criterio de pesquisa tem o % no inicio e no final
+    //desse jeito ele esta pesquisando a a propriedade nome desse jeito % nome %
+    List<Cozinha> findTodasByNomeContaining(String nome); 
+    
+}
+
+
+Outra palvar chave e a Between onde a pesquisa resulta entre dois valores distintos
+
+@GetMapping("/restaurantes/por-nome")
+    public List<Restaurante> restaurantePorTaxaFrete(Double taxaInicial, Double taxaFinal){
+        return restauranteRepository.findByTaxaFreteBetween(taxaInicial, taxaFinal);
+    }
+
+Documentação para ver todas as palavras chaves 
+
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
+_______________________________________________________________________________________________________________________________________________________
+
+Aula 5.8 Conhecendo os prefixos de query methods
+
+ - Usando a palavra FIRST ele somente traz uma objeto da pesquisa.
+
+public interface RestauranteRepository extends JpaRepository<Restaurante, Long> {
+
+   Optional<Restaurante> findFirstRestauranteByNomeContaining(String nome);
+}
+
+ - Traz os 2 primeiros pois utiliza a palavra chave Top e em seguida voce diz quantos quer trazer no caso 2.
+
+public interface RestauranteRepository extends JpaRepository<Restaurante, Long> {
+
+    List<Restaurante> findTop2ByNomeContaining(String nome);
+}
+
+_______________________________________________________________________________________________________________________________________________________
+
+Aula 5.9 Usando queries JPQL customizadas com @Query
+
+
+    - Consulata em JPQL utilizando uma query normal, como se fosse feita direto no banco de dados
+    
+	public interface RestauranteRepository extends JpaRepository<Restaurante, Long> {
+	
+	@Query("from Restaurante where nome like %:nome% and cozinha.id = :id")
+    List<Restaurante> consultarPorNome(String nome, @Param("id") Long cozinha); 
+
+    }
+
+_______________________________________________________________________________________________________________________________________________________
+
+
+Aula 5.10 Externalizando consultas JPQL para um arquivo XML
+
+E consultas JPQL muito grande o ideal e exporta as querys para um arquivo XML
+basta criar um pasta chamada (META-INF) na pasta (Resources), dentro da pasta META-INF criar-se um arquivo chamado (orm.xml).
+Dentro desse arquivo xml
+
+- cola-se esse conteudo
+
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/orm_2_2.xsd"
+    version="2.2">
+
+</entity-mappings>
+
+esse conteudo é uma configuraçao do spring JPA para voce adicionar as querys, assim os repositorios nao precisaram ter as consultas criadas por lá.
+
+- depois adiciona a query e seu xml tera no final essa configuração.
+
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings
+        xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/orm_2_2.xsd"
+        version="2.2">
+
+    <named-query name="Restaurante.consultarPorNome">
+        <query>
+            from Restaurante where nome like concat( '%', :nome, '%') and cozinha.id = :id
+        </query>
+    </named-query>
+
+</entity-mappings>
+
+Nota-se que a tag named-query vc especifica a entidade Restaurante(model) e depois o metodo que esta no repositorio.
+
+Na tag query voce entra com a sua pesquisa, uma observaçao:
+no caso de like com % precisa coloca o concat, pois em xml ele nao consegue fazer a compilaçao e da erro, 
+entao usamos o contac para concatenar o % com o parametro
+_______________________________________________________________________________________________________________________________________________________
+
+5.12 Implementando uma consulta dinâmica com JPQL
+
+
+@Repository
+public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
+
+    @PersistenceContext
+    private EntityManager manager;
+
+    public List<Restaurante> find(String nome, Double taxaFreteInicial, Double taxaFreteFinal) {
+        var jpql = new StringBuilder(); // StringBuilder serve para concatenar string usando o append
+        jpql.append("from Restaurante where 0 =0 ");
+
+        var parametros = new HashMap<String, Object>();
+
+        //StringUtils.hasLength verifica se é null ou esta vazio
+        if (StringUtils.hasLength(nome)){
+            jpql.append("and nome like :nome ");
+            parametros.put("nome", "%" + nome + "%");
+        }
+
+        if(taxaFreteInicial != null){
+            jpql.append("and taxaFrete >= :taxaInicial ");
+            parametros.put("taxaInicial", taxaFreteInicial);
+        }
+
+        if (taxaFreteFinal != null){
+            jpql.append("and taxaFrete <= :taxaFinal ");
+            parametros.put("taxaFinal", taxaFreteFinal);
+        }
+
+        TypedQuery<Restaurante> query = manager
+                .createQuery(jpql.toString(), Restaurante.class);
+        //Fazendo um Looping
+        parametros.forEach((chave, valor) -> query.setParameter(chave, valor));
+        return query.getResultList();
+    }
+
+_______________________________________________________________________________________________________________________________________________________
+
+5.16 Conhecendo o uso do padrao Specifications (DDD) com SDJ
+
+E um padrao que faz parte do Domain Driven Design (DDD) de forma que possa criar consultas, que poder combinadas com outras Specifications
+
+_______________________________________________________________________________________________________________________________________________________
+
+6.4 Mapeando classes incorporáveis com @Embedded e @Embeddable
+
+Com isso voce consegue adicionar uma classe que pode ser comum a outras classes nao necessitando que voce tenha que persistir ela no banco de dados,
+so basta voce incorporar a classe que deseja. Assim a Classe como no exemplo Restaurante ira persistir a classe incoporada Endereco.
+
+// @Embeddable => E uma classe incoporavel a uma entidade, indica que essa classe faz parte de uma outra classe(entidade persistida no banco), 
+e todas as propriedades dessa classe sao refletida na tabela da classe que sera incoparada.
+
+@Data
+@Embeddable 
+public class Endereco {
+
+	private String cep;
+	private String logradouro;
+	private String numero;
+	private String complemento;
+	private String bairro;
+	private Cidade cidade;
+}
+
+
+// @Embedded => Essa anotação é quando voce ja tem uma classe incoporavel(Embeddable) e esta adicionando a classe que sera incoporada(@Embedded).
+
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+public class Restaurante {
+
+	@EqualsAndHashCode.Include
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@NotNull
+	private String nome;
+
+	@Column(name = "taxa_frete", nullable = false)
+	private Double taxaFrete;
+
+	@ManyToOne
+	@JoinColumn(name = "cozinha_id") // caso queira muda o nome da coluna quando tem relacionamento entre entidade
+	private Cozinha cozinha;
+
+	@Embedded
+	private Endereco endereco;
+	
+	@JsonIgnore
+	@ManyToMany
+	@JoinTable(name = "restaurante_forma_pagamento",
+	joinColumns = @JoinColumn(name = "restaurante_id"), 
+	inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
+	private List<FormaPagamento> formasPagamento = new ArrayList<>();
+}
+
+_______________________________________________________________________________________________________________________________________________________
+
+6.10. Entendendo o Eager Loading
+
+Carregamento Eager Loading seginifica carregamento ancioso(seria um carregamento obrigatorio). Por padrao nos relacionamento ManyToOne por exemplo que tem  terminaçao e ToOne, ele vem com o carregamento Eager Loading, 
+entao toda vez que a aplicaçao subir ele vai carregar os dados da entidade relacionada com a terminaçao ToOne.
+
+_______________________________________________________________________________________________________________________________________________________
+
+6.11. Entendendo o Lazy Loading
+
+Carregamento Lazy Loading significa carregamento preguiçoso(somente e carregado quando é necessario). Por padrao nos relacionamentos ManyToMany por exemplo toda terminação com ToMany ele vem com o carregamento Lazy Loading.
+
+_______________________________________________________________________________________________________________________________________________________
+
+7.1. Entendendo o funcionamento de um pool de conexões
+
+APLICAÇÃO SEM POOL de conexao funciona de seguinte maneira, para cada requisiçao feita para a aplicação web(API) é gerada uma conexão com o banco de dados, e apos a requisiçao ser finalizada a mesma conexao
+gerada é finalizada, e a aplicação e o banco ficam na espera de uma nova requisiçao, assim gerando uma nova conexão.
+
+APLICAÇÃO COM POOL de conexões funciona de seguinte forma, a aplicação web(API) com a configuraçao de pool feita e gerada as conexões com o banco de dados deixando-as em estado ocioso na espera de uma requisiçao,
+dessa forma a conexao da API com o banco de dados nunca fecha otimizando o processo na hora da requisiçao. Nas configurações do Pool voce configura quantas conexões vc quer no minimo e quantas voce quer no maximo, exemplo:
+voce gerar 3 conexoes no minimo e com no maximo 5 conexoes, se simultaneamete a API receber 6 requisiçoes as 3 conexoes por padrao irao adicionar mais 2 conexoes e irao atender 5 requisições, a ultima ficara na fila esperando
+uma das requisiçoes serem atendidas.
+
+_______________________________________________________________________________________________________________________________________________________
+
+7.2. Conhecendo o Hikari: a solução padrão de pool de conexões no Spring Boot
+
+Hikari é responsavel pelo gerenciamento dos Pool de conexões com ele é possivel configurar toda parte de adicionar o minino e maximo de Pool em uma API, essa blibioteca é do pacote data-Jpa.
+
+_______________________________________________________________________________________________________________________________________________________
+
+7.3. Configurando o pool de conexões do Hikari
+
+spring.datasource.hikari.maximum-pool-size=5     ==> numero maximo de conexões fazendo a ponte entre a API e o banco de dados
+
+spring.datasource.hikari.minimum-idle=3          ==> numero minino/padrao de conexões fazendo a ponte entre a API e o banco de dados
+
+spring.datasource.hikari.idle-timeout=10000      ==> tempo limite para gerenciamento dos pool maximo de coneções, se API estiver com as 5 conexoes ativas ele tera o tempo limite ocioso 10000 milisegundos = 10 segundos, 
+                                                     apos isso ele finaliza 2 conexoes voltando para o padrao de 3
+
+_______________________________________________________________________________________________________________________________________________________
+
+7.4. Schema generation em produção não é uma boa prática
+
+spring.jpa.hibernate.ddl-auto=update
+
+O Schema generation so é valido ser usado em ambiente de teste e prototiopação, no caso em ambiente local.
+
+_______________________________________________________________________________________________________________________________________________________
+
+7.5. Flyway: ferramenta de versionamento de schemas de banco de dados
+
+Flyway é uma dentre as várias ferramentas que se propõem a trazer ordem e organização para os scripts SQL que são executados no banco de dados, funcionando como um controle de versão do mesmo
+
+
+_______________________________________________________________________________________________________________________________________________________
+
+7.6. Adicionando o Flyway no projeto e criando a primeira migração
+
+Para criar um arquivo de script sql de versionamento de banco voce deve seguir alguns padrões, EXEMPLO:
+
+V001__criacao-inicial.sql
+
+             V001 ==> versao do arquivo criado, ele deve seguir esse padrao de numeraçao V001,V002,V003 e assim por diante.
+
+__criacao-inicial ==> Depois da versao deve ser colocado 2 underline(importante nao esquecer), depois a descrição do arquivo 
+
+             .sql ==> e o tipo do arquivo 
+
+_______________________________________________________________________________________________________________________________________________________
+
+7.9. Criando migração a partir de DDL gerado por schema generation
+
+- Gera os scripts de geração de schemas para o banco de dados.
+spring.jpa.properties.javax.persistence.schema-generation.scripts.action=create
+
+- Especifica o caminho onde sera gerado os scripts
+spring.jpa.properties.javax.persistence.schema-generation.scripts.create-target=src/main/resources/ddl.sql
+
+Obs. Comente ou removar essas duas propriedades logo apos a criaçao do DDL. So precisamos disso para criar o arquivo uma unica vez.
+Esse tipo de migraçao é mais trabalhosa, pois por mais que ele gere os scripts voce tem que revisa ele todo, mudando algumas coisas como,
+os relaciomentos pois criar foreing Key com nomes malucos, tamanho dos caracters, entre outros tambem.
+
+_______________________________________________________________________________________________________________________________________________________
+
+7.10. Adicionando dados de testes com callback do Flyway
+
+Para adicionar massa de dados para teste no banco de dados, como estamos utilizando flyway, podemos criar um arquivo chamado afterMigrate.sql
+esse arquivo seja pra fazer qualquer coisa.
+Depois do Flyway rodas todas as versoes de scripts do banco ele roda esse arquivo por ultimo.
+
+_______________________________________________________________________________________________________________________________________________________
+
+8.2. Lançando exceções customizadas anotadas com @ResponseStatus
+
+Exemplo 1 de Exceção, é criada um classe de tratamento de exceptions:
+
+@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Entidade não encontrada") //Caso essa excesao seja lançada ira retorna o erro http 404
+public class EntidadeNaoEncontradaException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
+
+    public EntidadeNaoEncontradaException(String mensagem){
+        super(mensagem);
+    }
+}
+
+value = HttpStatus.NOT_FOUND ==> tipo de codigo HTTP que ira retorna, no caso 404.
+
+reason = "Entidade não encontrada" ==> mensagem customizada para lança para o cliente da API
+
+_______________________________________________________________________________________________________________________________________________________
+
+8.3. Lançando exceções do tipo ResponseStatusException
+
+ResponseStatusException essa propriedade é do Spring onde ela trata exceçoes, tambem e uma forma de tratar os erro orientando o cliente da API.
+ResponseStatusException ele pede como paramentro o tipo de resposta Http que ira retornar, e resposta costumizada.
+
+Exemplo:
+
+@RestController
+@RequestMapping("/cozinhas")
+public class CozinhaController {
+
+	@DeleteMapping("/{cozinhaId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT) // Essa anotaçao serve caso de erro ira retorna erro 404
+	public void remover(@PathVariable Long cozinhaId) {
+		try {
+			cadastroCozinha.excluir(cozinhaId);
+		} catch (EntidadeNaoEncontradaException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}                                                
+
+	}
+}
+
+_______________________________________________________________________________________________________________________________________________________
+
+8.12. Tratando exceções em nível de controlador com @ExceptionHandler
+
+o @ExceptionHandler serve para customiza o corpo das exception pois ele so trata as exception dentro daquele controlador, ou seja, a mensagem de erro padrao
+do spring nao e exibida, onde vc tem todo aquele log de erro. Entao com ele vc consegue tratar as exception de forma mais especifica pra cada erro que pode ser gerado.
+
+Classe Problema criada
+
+@Getter
+@Builder // essa anotaçao e um construtor, pois elimina o codigo new algumaclasse.
+public class Problema {
+
+	private LocalDateTime dataHora;
+	private String mensagem;
+}
+
+- Classe Controller Cidade
+
+@ExceptionHandler(EntidadeNaoEncontradaException.class)
+	public ResponseEntity<?> tratarEntidadeNaoEncontradaException(EntidadeNaoEncontradaException e) {
+		Problema problema = Problema.builder()
+				.dataHora(LocalDateTime.now())
+				.mensagem(e.getMessage()).build();
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problema);
+	}
+
+_______________________________________________________________________________________________________________________________________________________
+
+8.13. Tratando exceções globais com @ExceptionHandler e @ControllerAdvice
+
+essa anotaçao diz que esse componente sera o ponto central para todo os tratamento de exception que possouem a anotaçao @ExceptionHandler
+tornando assim uma classe de tratamento global.
+Apartir de cada classe que vc quer q seja tratada de forma costumizada basta adicionar no paramatro da anotaçao.
+
+Exemplos:
+@ExceptionHandler(EntidadeNaoEncontradaException.class)
+@ExceptionHandler(NegocioException.class)
+@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+
+
+@ControllerAdvice 
+public class ApiExceptionHandler {
+
+	@ExceptionHandler(EntidadeNaoEncontradaException.class)
+	public ResponseEntity<?> tratarEntidadeNaoEncontradaException(EntidadeNaoEncontradaException e) {
+		Problema problema = Problema.builder()
+				.dataHora(LocalDateTime.now())
+				.mensagem(e.getMessage()).build();
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problema);
+	}
+
+	@ExceptionHandler(NegocioException.class)
+	public ResponseEntity<?> tratarNegocioException(NegocioException e) {
+		Problema problema = Problema.builder()
+				.dataHora(LocalDateTime.now())
+				.mensagem(e.getMessage()).build();
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problema);
+	}
+	
+	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+	public ResponseEntity<?> tratarHttpMediaTypeNotSupportedException(){
+		Problema problema = Problema.builder()
+				.dataHora(LocalDateTime.now())
+				.mensagem("O tipo de mídia não é aceito").build();
+		return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(problema);
+	}
+}
+
+_______________________________________________________________________________________________________________________________________________________
+
+8.15. Criando um exception handler global com ResponseEntityExceptionHandler
+
+Ele ja trata erros internos do Spring MVC como HttpMediaTypeNotSupportedException, HttpRequestMethodNotSupportedException entre outros.
+
+EXEMPLO:
+
+@ControllerAdvice 
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+
+}
+_______________________________________________________________________________________________________________________________________________________
+
+8.16. Customizando o corpo da resposta padrão de ResponseEntityExceptionHandler
+
+Por padrao essa classe nao retorna nenhum corpo de resposta, por isso iremos subescrever o metodo para retorna uma resposta.
+
+EXEMPLO:
+
+@Override
+	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
+      
+	  //getReasonPhrase esse metodo descreve o motivo do erro de algum status Http
+		body = Problema.builder().dataHora(LocalDateTime.now()).mensagem(status.getReasonPhrase()).build();
+
+		return super.handleExceptionInternal(ex, body, headers, status, request);
+	}
+
+_______________________________________________________________________________________________________________________________________________________
+
+8.20. Customizando exception handlers de ResponseEntityExceptionHandler
+
+Esse metodo trata exception quando a requisição em Json e mandada pra API com sua estrutura errada, entao ela e capturada e tratada para retorna para o cliente
+de forma que ele consiga entender o erro.
+
+essa anotaçao diz que esse componente sera o ponto central para todo os tratamento de exception que possouem a anotaçao @ExceptionHandler
+tornando assim uma classe de tratamento global.
+
+@ControllerAdvice
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+
+	//Customizando resposta para requisições JSON com estrutura errada
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+		ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
+		String detail = "O corpo da requisição está inválido. Verifique erro de sintaxe.";
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+	}
+}
+
+_______________________________________________________________________________________________________________________________________________________
+
+8.21. Tratando a exception InvalidFormatException na desserialização
+
+É uma blibioteca da apache que nos fornece metodos para ajudar a simplificar o uso com String, Numeros e Exceptions etc.
+Nesse caso em especifico existe uma classe ( ExceptionUtils.getRootCause(ex)) nessa biblioteca que ira nos ajudar a melhorar o metodo acima informando mai detalhes para
+ajudar o cliente da API.
+
+PRIMEIRO ADICIONAMOS A DEPENDENCIA NO pom.xml
+
+<dependency>
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+	</dependency>
+
+Depois Adicionamos esses Metodos
+
+@ControllerAdvice
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+
+	//Customizando resposta para requisições JSON com estrutura errada
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+		Throwable rootCause = ExceptionUtils.getRootCause(ex);
+		if (rootCause instanceof InvalidFormatException) {
+			return handleInvalidFormatException((InvalidFormatException) rootCause, headers, status, request);
+		}
+		
+		ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
+		String detail = "O corpo da requisição está inválido. Verifique erro de sintaxe.";
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+	}
+	
+	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
+
+		String path = ex.getPath().stream().map(ref -> ref.getFieldName()).collect(Collectors.joining("."));
+
+		ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
+		String detail = String.format(
+				"A propriedade '%s' recebeu o valor '%s', que é de um tipo inválido."
+						+ "Corrija e informe um valor compatível com o tipo %s.",
+				path, ex.getValue(), ex.getTargetType().getSimpleName());
+
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+		return handleExceptionInternal(ex, problem, headers, status, request);
+	}
+}	
+_______________________________________________________________________________________________________________________________________________________
+
+8.22. Habilitando erros na desserialização de propriedades inexistentes ou ignoradas
+
+Quando uma nova entidade é criada em que o cliente da API adiciona uma propriedade que nao existe no model,
+por padrao seria retorna uma mensagem de erro informando o acontecido.
+
+Adicionamos no application.properties essa configuração, pois com ela habilitamos
+que nao sera feita a transação caso haja alguma propriedae desconhecida
+spring.jackson.deserialization.fail-on-unknown-properties=true
+
+Depois adicionamos essa, para que lance um exception caso o faça uma requisiçao com uma propriedade em que no model esteja com @JasonIgnore
+spring.jackson.deserialization.fail-on-ignored-properties=true
+
+_______________________________________________________________________________________________________________________________________________________
+
+9.2. Adicionando constraints e validando no controller com @Valid
+
+Adicionaremos anotaçoes do pacote bean validation como:
+@NotNull -> que serve pra ser obrigadorio ter valor naquela propriedade do model, nao podendo ser null.
+
+exemplo:
+
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+public class Restaurante {
+
+	@EqualsAndHashCode.Include
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@NotNull
+	@Column(nullable = false)
+	private String nome;
+}
+
+@Valid ele valida a propriedade do model, no caso do projeto ele valida a propriedae restaurante, e como temos um atributo (nome)
+com anotação NotNull ele faz a validaçao lançando um exception, sendo que, como essa exception de validaçao herda do ResponseEntityExceptionHandler
+ele ja e tratado devolvendo uma resposta pro cliente, pois esta na classe ApiExceptionHandler.
+
+exemplo de uso do @Valid:
+
+@RestController
+@RequestMapping("/restaurantes")
+public class RestauranteController {
+
+@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public Restaurante adicionar(@RequestBody @Valid Restaurante restaurante) {
+	    try {
+	        return cadastroRestaurante.salvar(restaurante);
+	    } catch (CozinhaNaoEncontradaException e) {
+	        throw new NegocioException(e.getMessage());
+	    }
+	}
+}
+
+_______________________________________________________________________________________________________________________________________________________
+
+9.4. Estendendo o Problem Details para adicionar as propriedades com constraints violadas
+
+BindingResult essa classe armazena todas as violaçoes de constraints pela exception, com isso podemos ter acesso as mensagens e de mais dados do erro.
+
+//essa anotaçao diz que esse componente sera o ponto central para todo os tratamento de exception que possouem a anotaçao @ExceptionHandler
+//tornando assim uma classe de tratamento global.
+@ControllerAdvice
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+
+@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+		String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
+
+		//Pegando os erros com BindingResults e transformando em string com stream e mapeando e atribuindo as variaves da classe Field.
+		BindingResult bindingResult = ex.getBindingResult();
+		List<Problem.Field> problemFields = bindingResult.getFieldErrors().stream().map(fieldError -> Problem.Field
+				.builder().name(fieldError.getField()).userMessage(fieldError.getDefaultMessage()).build())
+				.collect(Collectors.toList());
+
+		Problem problem = createProblemBuilder(status, problemType, detail).userMessage(detail).fields(problemFields)
+				.build();
+
+		return handleExceptionInternal(ex, problem, headers, status, request);
+	}       
+}
+
+Resultado do postman, o bindingResult vai retorna a lista de fields como no exemplo abaixo
+
+{
+    "status": 400,
+    "timestamp": "2021-03-15T20:10:14.0432328",
+    "type": "https://algafood.com.br/dados-invalidos",
+    "title": "Dados inválidos",
+    "detail": "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.",
+    "userMessage": "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.",
+    "fields": [
+        {
+            "name": "nome",
+            "userMessage": "não pode ser nulo"
+        }
+    ]
+}
+
+_______________________________________________________________________________________________________________________________________________________
+
+9.5. Conhecendo e adicionando mais constraints de validação no modelo
+
+@DecimalMin() -> Com essa anotação o valor da variavel tem que receber no minimo o valor atribuido a anotaçao
+como no exemplo
+
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+public class Restaurante {
+
+@EqualsAndHashCode.Include
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@NotNull
+	@Column(nullable = false)
+	private String nome;
+
+    @DecimalMin("1")  -> no exemplo o minimo a taxa_frete tem q receber o valor de 1, como foi definido.
+	@Column(name = "taxa_frete", nullable = false)
+	private Double taxaFrete;
+
+}
+
+@PositiveOrZero  -> Essa anotação so aceita valores que sejao positivos ou zero, nao aceitando valores negativos.
+
+@NotEmpty  -> Nao aceita vazio, mas aceita espaços.
+
+@NotBlank -> Com essa anotaçao a variavel nao aceita vazio, null e espaços.
+
+@Email -> Verifica se a sequência de caracteres especificada é um endereço de e-mail válido.
+
+@Future -> Verifica se a data anotada está no futuro
+
+@Past  -> Verifica se a data anotada está no passado
+
+@CPF -> Valida se o CPF esta em um formato valido
+
+@CNPJ -> Valida se o CNPJ esta em um formato valido
+
+Link com outras anotaçoes que sao muito uteis, como: 
+https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#section-builtin-constraints
+
+_______________________________________________________________________________________________________________________________________________________
+
+9.6. Validando as associações de uma entidade em cascata
+
+@Valid -> essa anotaçao ela valida em cascata no exemplo temos uma classe restaurante que tem uma relaçao com cozinha com @NotNull, so que se enviarmos uma requisiçao
+mandando null para o id de cozinha era da um exception nao tratado pois o NotNull nao valida dentro da classe Cozinha mas sim da variavel da classe, nesse caso utilizamos
+o @Valid para fazer um efeito cascata para entra na classe e validar qualquer atrbuto dentro da classe que contenha o @NotNull:
+
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+public class Restaurante {
+
+	@EqualsAndHashCode.Include
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@NotBlank
+	@Column(nullable = false)
+	private String nome;
+
+	@DecimalMin("0")
+	@Column(name = "taxa_frete", nullable = false)
+	private Double taxaFrete;
+
+	@Valid
+	@NotNull
+	@ManyToOne 
+	@JoinColumn(name = "cozinha_id", nullable = false) // caso queira muda o nome da coluna quando tem relacionamento entre entidade
+	private Cozinha cozinha;
+	
+}
+
+
+ Classe do Relacioanamento 
+ 
+ public class Cozinha {
+
+    @NotNull -> com  @Valid ele sera validado quando receber uma requisiçao que tenha que recebr um valor para o id
+	@EqualsAndHashCode.Include // deixando o atributo explicitamente incluso.
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nome;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "cozinha")
+    private List<Restaurante> restaurantes = new ArrayList<>(); // o new ArrayList é por boas praticas pra evitar exceptions
+}
+_______________________________________________________________________________________________________________________________________________________
+
+9.7. Agrupando e restringindo constraints que devem ser usadas na validação
+
+Na hora de implementar validaçoes podem ocorre conflitos, imagina que voce tem no seu model a seguinte classe.
+
+@Entity
+public class Cozinha {
+
+    @NotNull
+	@EqualsAndHashCode.Include // deixando o atributo explicitamente incluso.
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank
+    private String nome;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "cozinha")
+    private List<Restaurante> restaurantes = new ArrayList<>(); // o new ArrayList é por boas praticas pra evitar exceptions
+}
+
+ nota-se que o id esta com a anotação @NotNull so que em um metodo em que precisa por exemplo buscar o id e necessario validar, pois o id nao pode ser nulo,
+ mas imagina na hora de for cadastra um cozinha, daria erro pois o id so vai ser gerado apos a execução do metodo.
+ Por isso uma soluçao e criar um grupo de validaçoes, onde vc criar uma interface que so sera validado onde essa classe for implementada na validação.
+ No Caso esse exmplo acima ficaria assim:
+ 
+ @Entity
+public class Cozinha {
+
+    @NotNull(groups = Groups.CadastroRestaurante.class)
+	@EqualsAndHashCode.Include // deixando o atributo explicitamente incluso.
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank
+    private String nome;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "cozinha")
+    private List<Restaurante> restaurantes = new ArrayList<>(); // o new ArrayList é por boas praticas pra evitar exceptions
+}
+
+foi criada uma interface chamada Groups onde ela serve para demarca quais anotaçoes pertencem a quais grupos.
+como no exemplo abaixo, vc pode na mesma interface criar varios grupos.
+
+
+public interface Groups {
+
+	public interface CadastroRestaurante {}
+}
+
+
+entao e cada metodo vc valida essa classe como no exemplo do controller de cadastrar 
+
+@RestController
+@RequestMapping("/restaurantes")
+public class RestauranteController {
+
+	@Autowired
+	private RestauranteRepository restauranteRepository;
+
+	@Autowired
+	private CadastroRestauranteService cadastroRestaurante;
+
+	@GetMapping
+	public List<Restaurante> listar() {
+		return restauranteRepository.findAll();
+	}
+
+	@GetMapping("/{restauranteId}")
+	public Restaurante buscar(@PathVariable Long restauranteId) {
+		return cadastroRestaurante.buscarOuFalhar(restauranteId);
+	}
+
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public Restaurante adicionar(@RequestBody @Validated(Groups.CadastroRestaurante.class) Restaurante restaurante) {
+	    try {
+	        return cadastroRestaurante.salvar(restaurante);
+	    } catch (CozinhaNaoEncontradaException e) {
+	        throw new NegocioException(e.getMessage());
+	    }
+	}
+
+Nota-se que o metedo adicionar esta com a anotação @Validated(Groups.CadastroRestaurante.class) entao nesse metodo todas as anotaçoes de validaçoes que sao pertecentes a esse grupo
+vao ser validadas logo as que nao tem, nao iram ser validadas, mas lembrando que so vale pro metodo que esta sendo implementado o grupo de validaçoes.
+
+_______________________________________________________________________________________________________________________________________________________
+
+9.8. Convertendo grupos de constraints para validação em cascata com @ConvertGroup
+
+Converte as anotaçoes que estao em default que sao por padrao para o grupo que foi criado
+como no exemplo:
+
+@Entity
+public class Restaurante {
+
+	@EqualsAndHashCode.Include
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@NotBlank
+	@Column(nullable = false)
+	private String nome;
+
+	@PositiveOrZero
+	@Column(name = "taxa_frete", nullable = false)
+	private Double taxaFrete;
+
+	@Valid
+	@ConvertGroup(from = Default.class, to = Groups.CadastroRestaurante.class)
+	@NotNull
+	@ManyToOne 
+	@JoinColumn(name = "cozinha_id", nullable = false) // caso queira muda o nome da coluna quando tem relacionamento entre entidade
+	private Cozinha cozinha;
+
+	@JsonIgnore
+	@Embedded
+	private Endereco endereco;
+}	
+
+Nota-se que a instacia de cozinha esta com a anotaçao @ConvertGroup(from = Default.class, to = Groups.CadastroRestaurante.class)
+que é reponsável pela conversão.
+
+_______________________________________________________________________________________________________________________________________________________
+
+10.3. Criando e rodando um teste de integração com Spring Boot, JUnit e AssertJ
+
+metodo assertThat() é um metodo de que serve para criar condiçoes pra validar o metodo que esta sendo testado pela classe de teste
+
+@Test
+	public void testarCadastroCozinhaComSucesso() {
+
+		// Cenário
+		Cozinha novaCozinha = new Cozinha();
+		novaCozinha.setNome("Chinesa");
+
+		// Ação
+		novaCozinha = cadastroCozinhaService.salvar(novaCozinha);
+
+		// Validação
+		assertThat(novaCozinha).isNotNull(); ---> Condiçao que nao pode ser nula
+		assertThat(novaCozinha.getId()).isNotNull(); ---> Condiçao que nao pode ser nula o id
+	}
+	
+_______________________________________________________________________________________________________________________________________________________
+
+
+Exemplos de Teste de Integração
+
+@RunWith(SpringRunner.class)  //serve para da suporte as testes, com ele é possivel se beneficiar dos recursos do spring como injeçao de dependencias e outros
+@SpringBootTest   //Funcionalidades do Spring para os testes
+public class CadastroCozinhaIT {
+
+	@Autowired
+	private CadastroCozinhaService cadastroCozinhaService;
+
+	@Test
+	public void deveAtribuirId_QuandoCadastrarCozinhaComDadosCorretos() {
+
+		// Cenário
+		Cozinha novaCozinha = new Cozinha();
+		novaCozinha.setNome("Chinesa");
+
+		// Ação
+		novaCozinha = cadastroCozinhaService.salvar(novaCozinha);
+
+		// Validação
+		assertThat(novaCozinha).isNotNull();
+		assertThat(novaCozinha.getId()).isNotNull();
+	}
+
+	@Test(expected = ConstraintViolationException.class)
+	public void deveFalhar_QuandoCadastrarCozinhaSemNome() {
+		Cozinha novaCozinha = new Cozinha();
+		novaCozinha.setNome(null);
+
+		novaCozinha = cadastroCozinhaService.salvar(novaCozinha);
+	}
+
+	@Test(expected = EntidadeEmUsoException.class)
+	public void deveFalhar_QuandoExcluirCozinhaEmUso() {
+		cadastroCozinhaService.excluir(1L);
+	}
+
+	@Test(expected = CozinhaNaoEncontradaException.class)
+	public void deveFalhar_QuandoExcluirCozinhaInexistente() {
+		cadastroCozinhaService.excluir(100L);
+	}
+}
+
+_______________________________________________________________________________________________________________________________________________________
+
+11.1. Analisando e definindo melhor o escopo das transações
+
+@Transactional // Essa anotaçao abre transação com banco de dados, permitindo salva, excluir e updates etc
+
+_______________________________________________________________________________________________________________________________________________________
+
+11.2. Refinando o payload de cadastro com @JsonIgnoreProperties
+
+@JsonIgnoreProperties(value = "nome", allowGetters = true) ==> Essa anotação serve para quando vc tem uma entidade e ela esta relacionada com outra entidade (ManyToMany, ManyToOne e etc)
+ela nao permite que o cliente da api modifique a classe que esta sendo relacionada como no exemplo:
+
+public class Restaurante {
+
+	@EqualsAndHashCode.Include
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@NotBlank
+	@Column(nullable = false)
+	private String nome;
+
+	@NotNull
+	//@PositiveOrZero
+	@TaxaFrete
+	@Column(name = "taxa_frete", nullable = false)
+	private Double taxaFrete;
+
+	@JsonIgnoreProperties(value = "nome", allowGetters = true)  ====> nesse caso se o cliente fizer uma requisição querendo mudar o atributo nome por exemplo nao vai ser permitido
+	@Valid
+	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
+	@NotNull
+	@ManyToOne 
+	@JoinColumn(name = "cozinha_id", nullable = false) // caso queira muda o nome da coluna quando tem relacionamento entre entidade
+	private Cozinha cozinha;
+
+===> @JsonIgnoreProperties(value = "nome", allowGetters = true) ===> value = "nome": é valor do atributo     allowGetters = true: significa que na hora vc consegue visualizar o atributo na hora da requisição(get do valor)
+_______________________________________________________________________________________________________________________________________________________
+
+11.3. Criando classes de mixin para usar as anotações do Jackson
+
+Classes mixin e um padrao de projeto usado para manter o pacote de dominio mais limpa das anotaçoes do jackson(jason)
+Pois quando se tem um model com seus atributos e muitas anotaçoes misturada entre elas, inclusive as anotaçoes jason
+e uma boa pratica criar uma classe mixin da classe pai para deixar os atrbutos que estao com as anotaçoes json
+separados das outras anotaçoes como no exemplo:
+
+@ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+public class Restaurante {
+
+	@EqualsAndHashCode.Include
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@NotBlank
+	@Column(nullable = false)
+	private String nome;
+
+	@NotNull
+	//@PositiveOrZero
+	@TaxaFrete
+	@Column(name = "taxa_frete", nullable = false)
+	private Double taxaFrete;
+
+	@JsonIgnoreProperties(value = "nome", allowGetters = true)
+	@Valid
+	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
+	@NotNull
+	@ManyToOne 
+	@JoinColumn(name = "cozinha_id", nullable = false) // caso queira muda o nome da coluna quando tem relacionamento entre entidade
+	private Cozinha cozinha;
+
+	@JsonIgnore
+	@Embedded
+	private Endereco endereco;
+	
+	@JsonIgnore
+	@ManyToMany
+	@JoinTable(name = "restaurante_forma_pagamento",
+	joinColumns = @JoinColumn(name = "restaurante_id"), 
+	inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
+	private List<FormaPagamento> formasPagamento = new ArrayList<>();
+	
+	@CreationTimestamp // Na hora de salvar a entidade com essa anotaçao do hibernate, ele ira criar data e hora atual para ser salvo no banco
+	@Column(nullable = false)
+	private LocalDateTime dataCadastro;
+	
+	@UpdateTimestamp //com essa anotaçao do hibernate sempre que a entidade for atualizada ela ira fazer um update da data e hora atual
+	@Column(nullable = false)
+	private LocalDateTime dataAtualizacao;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "restaurante")
+	private List<Produto> produtos = new ArrayList<>();
+	
+	obs: aqui nos temos as anotaçoes misturadas, para resolver iremos criar uma classe chamada RestauranteMixin e add a ela so os atributos que contem anotação json
+	como no exemplo abaixo
+	
+	public class RestauranteMixin {
+
+	@JsonIgnoreProperties(value = "nome", allowGetters = true)
+	private Cozinha cozinha;
+
+	@JsonIgnore
+	private Endereco endereco;
+	
+	@JsonIgnore
+	private List<FormaPagamento> formasPagamento = new ArrayList<>();
+	
+	@JsonIgnore
+	private LocalDateTime dataCadastro;
+	
+	@JsonIgnore
+	private LocalDateTime dataAtualizacao;
+	
+	@JsonIgnore
+	private List<Produto> produtos = new ArrayList<>();
+	
+}
+	Obs: mas so isso nao ira funcionar, pra isso vc precisa mapear a classe criada com a classe de dominio
+	para isso vc criara uma classe como no exemplo:
+
+@Component
+public class JacksonMixinModule extends SimpleModule {  ==> SimpleModule é ele que responsavel pelo metodo setMixInAnnotation de mapeamento
+
+	private static final long serialVersionUID = 1L;
+
+	public JacksonMixinModule() {
+		setMixInAnnotation(Restaurante.class, RestauranteMixin.class);
+	}
+}
+
+obs: com isso sua classe mixin e sua classe de dominio estao mapeados e agora caso vc tenha que fazer alguma alteraçao basta
+ir no mixin da classe
+
+_______________________________________________________________________________________________________________________________________________________

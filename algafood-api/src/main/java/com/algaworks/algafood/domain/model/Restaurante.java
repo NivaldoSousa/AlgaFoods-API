@@ -27,7 +27,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.algaworks.algafood.core.validation.Groups;
 import com.algaworks.algafood.core.validation.TaxaFrete;
 import com.algaworks.algafood.core.validation.ValorZeroIncluiDescricao;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,7 +47,6 @@ public class Restaurante {
 	private String nome;
 
 	@NotNull
-	//@PositiveOrZero
 	@TaxaFrete
 	@Column(name = "taxa_frete", nullable = false)
 	private Double taxaFrete;
@@ -60,11 +58,9 @@ public class Restaurante {
 	@JoinColumn(name = "cozinha_id", nullable = false) // caso queira muda o nome da coluna quando tem relacionamento entre entidade
 	private Cozinha cozinha;
 
-	@JsonIgnore
 	@Embedded
 	private Endereco endereco;
 	
-	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento",
 	joinColumns = @JoinColumn(name = "restaurante_id"), 
@@ -79,7 +75,6 @@ public class Restaurante {
 	@Column(nullable = false)
 	private LocalDateTime dataAtualizacao;
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<>();
 }
