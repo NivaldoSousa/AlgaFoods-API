@@ -1,6 +1,6 @@
 package com.algaworks.algafood.domain.model;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class Usuario {
 	
 	@CreationTimestamp // Na hora de salvar a entidade com essa anotaçao do hibernate, ele ira criar data e hora atual para ser salvo no banco
 	@Column(nullable = false)
-	private LocalDateTime dataCadastro;
+	private OffsetDateTime dataCadastro;
 	
 	@ManyToMany
 	@JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "usuario_id"),
