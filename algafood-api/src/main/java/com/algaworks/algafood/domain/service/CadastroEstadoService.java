@@ -1,5 +1,7 @@
 package com.algaworks.algafood.domain.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -26,9 +28,14 @@ public class CadastroEstadoService {
 		return estadoRepository.findById(estadoId).orElseThrow(() -> new EstadoNaoEncontradaException(estadoId));
 	}
 
+	@Transactional
 	public void excluir(Long estadoId) {
 		try {
 			estadoRepository.deleteById(estadoId);
+			//O flush serve para comitar a operação no caso deleteById na hora da execução
+			//como o metodo esta anotado com o @Transactional, caso de um execption nao consiguiremos capturar e tratar
+			//retornando uma execption customizada, com isso o flush resolver esse problema.
+			estadoRepository.flush();
 
 		} catch (EmptyResultDataAccessException e) {
 			throw new EstadoNaoEncontradaException(estadoId);

@@ -1,13 +1,11 @@
 package com.algaworks.algafood.infrastructure.repository;
 
-import java.util.Optional;
-
-import javax.persistence.EntityManager;
-
+import com.algaworks.algafood.domain.repository.CustomJpaRepository;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
-import com.algaworks.algafood.domain.repository.CustomJpaRepository;
+import javax.persistence.EntityManager;
+import java.util.Optional;
 
 public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implements CustomJpaRepository<T, ID> {
 
@@ -25,8 +23,12 @@ public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> i
 		var jpql = "from " + getDomainClass().getName();
 		T entity = manager.createQuery(jpql, getDomainClass()).setMaxResults(1).getSingleResult();
 
-		//Pode retorna um optional com valor ou sem valor
-		return Optional.ofNullable(entity);
+		return Optional.ofNullable(entity); //Pode retorna um optional com valor ou sem valor
+	}
+
+	@Override
+	public void detach(T entity) {
+		manager.detach(entity);
 	}
 
 }

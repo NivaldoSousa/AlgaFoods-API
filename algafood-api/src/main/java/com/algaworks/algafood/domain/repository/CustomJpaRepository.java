@@ -9,4 +9,9 @@ import org.springframework.data.repository.NoRepositoryBean;
 public interface CustomJpaRepository<T,ID> extends JpaRepository<T, ID> {
 
 	Optional<T> buscarPrimeiro();
+
+	/*
+	* Responsavel por remover a entidade do gerenciamento do banco de dados atraves do @Transactional
+	* */
+	void detach(T entity);
 }
