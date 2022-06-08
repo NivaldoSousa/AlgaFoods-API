@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class CadastroRestauranteService {
 
@@ -58,7 +60,23 @@ public class CadastroRestauranteService {
     	Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
     	restauranteAtual.inativar();
     }
-    
+
+    /*
+    * Responsavel por receber uma lista de restuarante e ativar
+    * */
+    @Transactional
+    public void ativar(List<Long> restauranteIds){
+        restauranteIds.forEach(this::ativar);
+    }
+
+    /*
+     * Responsavel por receber uma lista de restuarante e ativar
+     * */
+    @Transactional
+    public void inativar(List<Long> restauranteIds){
+        restauranteIds.forEach(this::inativar);
+    }
+
     public Restaurante buscarOuFalhar(Long restauranteId) {
     	return restauranteRepository.findById(restauranteId)
     			.orElseThrow(() -> new RestauranteNaoEncontradoException(restauranteId));
