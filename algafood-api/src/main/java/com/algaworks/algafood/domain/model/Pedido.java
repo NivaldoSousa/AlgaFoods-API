@@ -1,77 +1,101 @@
 package com.algaworks.algafood.domain.model;
 
+import com.algaworks.algafood.domain.exception.NegocioException;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.*;
-
-import org.hibernate.annotations.CreationTimestamp;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Pedido {
 
-	@EqualsAndHashCode.Include
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	private BigDecimal subtotal;
-	private BigDecimal taxaFrete;
-	private BigDecimal valorTotal;
-	
-	@Embedded
-	private Endereco enderecoEntrega;
+    @EqualsAndHashCode.Include
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Enumerated(EnumType.STRING)
-	private StatusPedido status = StatusPedido.CRIADO;
-	
-	@CreationTimestamp
-	private OffsetDateTime dataCriacao;
-	
-	private OffsetDateTime dataConfirmacao;
-	private OffsetDateTime dataCancelamento;
-	private OffsetDateTime dataEntrega;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(nullable = false)
-	private FormaPagamento formaPagamento;
-	
-	@ManyToOne
-	@JoinColumn(nullable = false)
-	private Restaurante restaurante;
-	
-	@ManyToOne
-	@JoinColumn(name = "usuario_cliente_id", nullable = false )
-	private Usuario cliente;
+    private BigDecimal subtotal;
+    private BigDecimal taxaFrete;
+    private BigDecimal valorTotal;
 
-	/*
-	* sem o cascade quando o pedido tiver ItemPedido nao será salvo
-	* */
-	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
-	private List<ItemPedido> itens = new ArrayList<>();
+    @Embedded
+    private Endereco enderecoEntrega;
 
-	public void calcularValorTotal() {
-		getItens().forEach(ItemPedido::calcularPrecoTotal);
+    @Enumerated(EnumType.STRING)
+    private StatusPedido status = StatusPedido.CRIADO;
 
-		this.subtotal = getItens().stream()
-				.map(item -> item.getPrecoTotal())
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
+    @CreationTimestamp
+    private OffsetDateTime dataCriacao;
 
-		this.valorTotal = this.subtotal.add(this.taxaFrete);
-	}
+    private OffsetDateTime dataConfirmacao;
+    private OffsetDateTime dataCancelamento;
+    private OffsetDateTime dataEntrega;
 
-	public void definirFrete() {
-		setTaxaFrete(BigDecimal.valueOf(getRestaurante().getTaxaFrete()));
-	}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private FormaPagamento formaPagamento;
 
-	public void atribuirPedidoAosItens() {
-		getItens().forEach(item -> item.setPedido(this));
-	}
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Restaurante restaurante;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_cliente_id", nullable = false)
+    private Usuario cliente;
+
+    /*
+     * sem o cascade quando o pedido tiver ItemPedido nao será salvo
+     * */
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private List<ItemPedido> itens = new ArrayList<>();
+
+    public void calcularValorTotal() {
+        getItens().forEach(ItemPedido::calcularPrecoTotal);
+
+        this.subtotal = getItens().stream()
+                .map(item -> item.getPrecoTotal())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        this.valorTotal = this.subtotal.add(this.taxaFrete);
+    }
+
+    public void definirFrete() {
+        setTaxaFrete(BigDecimal.valueOf(getRestaurante().getTaxaFrete()));
+    }
+
+    public void atribuirPedidoAosItens() {
+        getItens().forEach(item -> item.setPedido(this));
+    }
+
+    public void confirmar() {
+        setStatus(StatusPedido.CONFIRMADO);
+        setDataConfirmacao(OffsetDateTime.now());
+    }
+
+    public void entregar() {
+        setStatus(StatusPedido.ENTREGUE);
+        setDataEntrega(OffsetDateTime.now());
+    }
+
+    public void cancelar() {
+        setStatus(StatusPedido.CANCELADO);
+        setDataCancelamento(OffsetDateTime.now());
+    }
+
+    private void setStatus(StatusPedido novoStatus) {
+        if (getStatus().naoPodeAlterarPara(novoStatus)) {
+            throw new NegocioException(
+                    String.format("Status do pedido %d não pode ser alterado de %s para %s",
+                            getId(), getStatus().getDescricao(),
+                            novoStatus.getDescricao()));
+        }
+        this.status = novoStatus;
+    }
 }
