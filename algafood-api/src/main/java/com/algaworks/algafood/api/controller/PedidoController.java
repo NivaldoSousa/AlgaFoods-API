@@ -38,12 +38,6 @@ public class PedidoController {
     @Autowired
     private PedidoInputDisassembler pedidoInputDisassembler;
 
-    @GetMapping
-    public List<PedidoResumoModel> listar() {
-        List<Pedido> todosPedidos = pedidoRepository.findAll();
-
-        return pedidoResumoModelAssembler.toCollectionModel(todosPedidos);
-    }
 
     @GetMapping("/{codigoPedido}")
     public PedidoModel buscar(@PathVariable String codigoPedido) {
@@ -69,4 +63,34 @@ public class PedidoController {
             throw new NegocioException(e.getMessage(), e);
         }
     }
+
+    @GetMapping
+    public List<PedidoResumoModel> listar() {
+        List<Pedido> todosPedidos = pedidoRepository.findAll();
+
+        return pedidoResumoModelAssembler.toCollectionModel(todosPedidos);
+    }
+
+       /* FORMA DE FAZER UM FILTER DE CAMPOS COM @JsonFilter
+       * @JsonFilter -> filtro logico, para filtrar propriedades da classe , NESTE CASO A ANOTAÇÃO @JsonFilter("pedidoFilter") FOI USADO NA CLASSE PedidoResumoModel
+       * @GetMapping("/filter")
+      public MappingJacksonValue listarPorFiltro(@RequestParam(required = false) String campos) {
+          List<Pedido> pedidos = pedidoRepository.findAll();
+          List<PedidoResumoModel> pedidosModel = pedidoResumoModelAssembler.toCollectionModel(pedidos);
+
+          MappingJacksonValue pedidosWrapper = new MappingJacksonValue(pedidosModel); // envelopar
+
+          SimpleFilterProvider filterProvider = new SimpleFilterProvider();  // instancia a classe para a filtragem
+
+          if(StringUtils.isNotBlank(campos)){
+              // filterOutAllExcept recebe um array, com isso recbemos por parametro os campos informados pelo consumido da API, como o valor da string seráseparada do virgular os campos basta usar o split que ele retorna um array
+              filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.filterOutAllExcept(campos.split(",")));
+          }else{
+              filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.serializeAll()); // passa o nome do filter do @JsonFilter, SimpleBeanPropertyFilter diz o tipo de filtro que irá funcionar nesse caso ele ira mostrar todos os atrinutos
+          }
+
+          pedidosWrapper.setFilters(filterProvider);
+
+          return pedidosWrapper;
+      }*/
 }
