@@ -11,10 +11,13 @@ public class PedidoSpec {
 
     public static Specification<Pedido> usandoFiltro(PedidoFilter filtro){
         return (root, query, builder) -> {
-            //atribuindo o fetch para nao ter prblemas de muitos selects sendo feitos para retornar os registros
-            root.fetch("restaurante").fetch("cozinha");
-            root.fetch("cliente");
 
+            //Verifica se a consulta é do tipo Pedido pois se for do tipo numerico por causa do count do pageble nao entra na condição evitando uma exception
+            if(Pedido.class.equals(query.getResultType())) {
+                //atribuindo o fetch para nao ter prblemas de muitos selects sendo feitos para retornar os registros
+                root.fetch("restaurante").fetch("cozinha");
+                root.fetch("cliente");
+            }
             var predicates = new ArrayList<Predicate>(); // criando um array de Predicates para add os mapeamento dos atributos
 
             if(filtro.getClienteId() != null){

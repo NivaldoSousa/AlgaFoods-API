@@ -15,6 +15,10 @@ import com.algaworks.algafood.domain.repository.filter.PedidoFilter;
 import com.algaworks.algafood.domain.service.EmissaoPedidoService;
 import com.algaworks.algafood.infrastructure.repository.spec.PedidoSpec;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,11 +70,21 @@ public class PedidoController {
         }
     }
 
+    /*
+     * Pageable - paginação, seria o numero da pagina
+     * param -> PedidoFilter filtro de pesquisa customizada
+     * param -> @PageableDefault(size = 10) -> anotação que serve para dizer quantos elementos por default será retorna pela paginação
+     * param -> Pageable -> Interface abstrata para informações de paginação
+     * */
     @GetMapping
-    public List<PedidoResumoModel> pesquisar(PedidoFilter filtro) {
-        List<Pedido> todosPedidos = pedidoRepository.findAll(PedidoSpec.usandoFiltro(filtro));
+    public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
+        Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpec.usandoFiltro(filtro), pageable);
 
-        return pedidoResumoModelAssembler.toCollectionModel(todosPedidos);
+        List<PedidoResumoModel> pedidosResumoModel = pedidoResumoModelAssembler.toCollectionModel(pedidosPage.getContent()); // getContent extrai a lista de cozinha daquela pagina e devolve um List
+
+        Page<PedidoResumoModel> pedidosResumoModelPage = new PageImpl<>(pedidosResumoModel, pageable, pedidosPage.getTotalElements()); // tranformando a list de PedidoResumoModel em um page
+
+        return pedidosResumoModelPage;
     }
 
        /* FORMA DE FAZER UM FILTER DE CAMPOS COM @JsonFilter
