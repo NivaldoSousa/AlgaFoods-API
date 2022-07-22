@@ -11,7 +11,7 @@ import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.PedidoRepository;
-import com.algaworks.algafood.domain.repository.filter.PedidoFilter;
+import com.algaworks.algafood.domain.filter.PedidoFilter;
 import com.algaworks.algafood.domain.service.EmissaoPedidoService;
 import com.algaworks.algafood.infrastructure.repository.spec.PedidoSpec;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +78,7 @@ public class PedidoController {
      * */
     @GetMapping
     public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
+
         Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpec.usandoFiltro(filtro), pageable);
 
         List<PedidoResumoModel> pedidosResumoModel = pedidoResumoModelAssembler.toCollectionModel(pedidosPage.getContent()); // getContent extrai a lista de cozinha daquela pagina e devolve um List
@@ -87,7 +88,7 @@ public class PedidoController {
         return pedidosResumoModelPage;
     }
 
-       /* FORMA DE FAZER UM FILTER DE CAMPOS COM @JsonFilter
+    /* FORMA DE FAZER UM FILTER DE CAMPOS COM @JsonFilter
        * @JsonFilter -> filtro logico, para filtrar propriedades da classe , NESTE CASO A ANOTAÇÃO @JsonFilter("pedidoFilter") FOI USADO NA CLASSE PedidoResumoModel
        * @GetMapping("/filter")
       public MappingJacksonValue listarPorFiltro(@RequestParam(required = false) String campos) {
