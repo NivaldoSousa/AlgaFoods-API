@@ -21,15 +21,22 @@ public class VendaQueryServiceImpl implements VendaQueryService {
     private EntityManager manager;
 
     @Override
-    public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filtro) {
+    public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filtro, String timeOffset) {
         var builder = manager.getCriteriaBuilder(); //criando uma instancia do criteria
         var query = builder.createQuery(VendaDiaria.class); // retorno do tipo da comsulta
         var root = query.from(Pedido.class); // definindo a clausula from do select
 
+        //convertendo a data para o timeZone de Brasilia, pois a data do banco esta em UTC
+        var functionConvertTzDataCriacao = builder.function("convert_tz", // nome da função do mysql
+                Date.class,  // resultado esperado, no caso sera convertido em Date
+                root.get("dataCriacao"), //Coluna do banco
+                builder.literal("+00:00"), // a função funcioction nesse parametro nao aceita uma string direta, por isso utilizamos o builder.literal por se tratar de um expression
+                builder.literal(timeOffset)); // a função funcioction nesse parametro nao aceita uma string direta, por isso utilizamos o builder.literal por se tratar de um expression
+
         //criando o retorno da função date() do mysql para retorna a data do pedido truncada
         var functionDateDataCriacao = builder.function("date", // nome da função do mysql
-                Date.class, // resultado esperado, no caso sera convertido em LocalDate
-                root.get("dataCriacao")); // Argumento da expressão, ou seja sera truncada a coluna da tabela Pedido
+                Date.class, // resultado esperado, no caso sera convertido em Date
+                functionConvertTzDataCriacao); // Argumento da expressão, ou seja sera truncada a coluna da tabela Pedido
 
         //Construção do objeto VendaDiaria apartir da seleção dos atributos da classe Pedido
         //Importante seguir a ordem em que o construtor da classe VendaDiaria está definido na hora de usar o construct
