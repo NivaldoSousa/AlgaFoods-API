@@ -1473,3 +1473,6 @@ sort -> ordenação da coleção, basta coloca o nome do atributo do objeto que 
 @PageableDefault(size = 10) -> anotação que serve para dizer quantos elementos por default será retorna pela paginação
 
 Obs: Essa paginação é feita no banco de dados, nao em memoria isso é importante pois nao consome o desempenho
+
+
+_______________________________________________________________________________________________________________________________________________________
