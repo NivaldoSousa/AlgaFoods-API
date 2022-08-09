@@ -7,6 +7,9 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 import java.util.List;
 
+/*
+ * Classe responsavel pela validação da anotação customizada
+ * */
 public class FileContentTypeValidator implements ConstraintValidator<FileContentType, MultipartFile> {
 
     private List<String> allowedContentTypes; //representa os tipos de arquivos aceitos

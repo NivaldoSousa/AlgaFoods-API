@@ -6,6 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+/*
+* Classe responsavel pela validação da anotação customizada
+* */
 public class FileSizeValidator implements ConstraintValidator<FileSize, MultipartFile> {
 
     private DataSize maxSize; //representa um tamanho de dado
