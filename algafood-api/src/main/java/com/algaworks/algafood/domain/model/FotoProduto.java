@@ -30,4 +30,15 @@ public class FotoProduto {
 	private String contentType;
 
 	private Long tamanho;
+
+	/*
+	* Obtem o id do restaurante apartir do produto
+	* Facilita a leitura, para evitar muitos .get() ate chegar no atributo
+	* */
+	public Long getRestauranteId(){
+		if(getProduto() != null){
+			return getProduto().getRestaurante().getId();
+		}
+		return null;
+	}
 }
