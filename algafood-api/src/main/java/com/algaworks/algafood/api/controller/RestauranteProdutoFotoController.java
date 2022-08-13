@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 /*
  * End-Point para o serviço de upload da foto
@@ -37,7 +38,7 @@ public class RestauranteProdutoFotoController {
      * consumes -> desta forma o metodo esta apenas mapeado para o content-type MultipartFile
      * */
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId, @Valid FotoProdutoInput fotoProdutoInput) {
+    public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId, @Valid FotoProdutoInput fotoProdutoInput) throws IOException {
 
         Produto produto = cadastroProdutoService.buscarOuFalhar(restauranteId, produtoId);
 
@@ -50,7 +51,7 @@ public class RestauranteProdutoFotoController {
         foto.setTamanho(arquivo.getSize());
         foto.setNomeArquivo(arquivo.getOriginalFilename());
 
-        FotoProduto fotoSalva = catalogoFotoProdutoService.salvar(foto);
+        FotoProduto fotoSalva = catalogoFotoProdutoService.salvar(foto, arquivo.getInputStream());
         return fotoProdutoModelAssembler.toModel(fotoSalva);
     }
 }

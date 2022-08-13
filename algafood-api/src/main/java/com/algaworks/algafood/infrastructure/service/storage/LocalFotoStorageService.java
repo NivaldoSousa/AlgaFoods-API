@@ -14,8 +14,7 @@ import java.nio.file.Path;
 @Service
 public class LocalFotoStorageService implements FotoStorageService {
 
-    @Value("${algafood.storage.local.diretorio-fotos}")
-    // recuperar o valor do caminho configurado no application.properties
+    @Value("${algafood.storage.local.diretorio-fotos}")// recuperar o valor do caminho configurado no application.properties
     private Path diretorioFotos;
 
     @Override

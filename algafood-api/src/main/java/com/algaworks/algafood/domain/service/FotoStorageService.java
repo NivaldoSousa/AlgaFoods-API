@@ -4,11 +4,23 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.io.InputStream;
+import java.util.UUID;
 
 public interface FotoStorageService {
 
     void armazenar(NovaFoto novaFoto);
 
+    /*
+    * Gera um codigo unico para ser concatenado com o nome da foto
+    * para evitar problemas de duplicação na hora de armazenar
+    * */
+    default String gerarNomeArquivo(String nomeOriginal){
+        return UUID.randomUUID().toString() + "_" + nomeOriginal;
+    }
+
+    /*
+    * Classe responsavel por receber os dados da foto para ser armazenada
+    * */
     @Getter
     @Builder
     class NovaFoto{
