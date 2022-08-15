@@ -1592,3 +1592,24 @@ obs: com isso sua classe mixin e sua classe de dominio estao mapeados e agora ca
 ir no mixin da classe
 
 _______________________________________________________________________________________________________________________________________________________
+
+14.17. Amazon S3: conhecendo o serviço de storage da AWS
+
+Serviço Amazon S3 serve para armazenar e recuperar qualquer arquivo.
+Exemplo os filmes da netflix são armazenados no S3, entao temos beneficios de performace, escalabilidade e confiabilidade e entre outros.
+
+Dentro do serviço da S3 nós temos os buckets que sao unidades de um disco, ou seja vc criar um partição para savar seus dados, fotos e etc.
+
+_______________________________________________________________________________________________________________________________________________________
+
+14.18. Criando usuário com permissões para adicionar objetos na Amazon S3
+
+IAM é um serviço da amazon para criar um usuario onde podemos consumir a api da amazon e assim conseguir ter acesso ao bucket.
+
+_______________________________________________________________________________________________________________________________________________________
+
+14.19. Criando chaves de acesso para a API da AWS
+
+Para ter acesso API da amazon é necessario ter a chave de acesso, para quando formos implementar no codigo chava precisaremos dela.
+para isso caso ainda nao tenha um chave de acesso é necessario criar um nova, para isso basta ir em "Criar chave de acesso"
+no caminho: IAM -> Usuários -> algaFood
