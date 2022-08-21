@@ -1,5 +1,6 @@
 package com.algaworks.algafood.core.storage;
 
+import com.amazonaws.regions.Regions;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -18,6 +19,7 @@ import java.nio.file.Path;
 public class StorageProperties {
 
     private Local local = new Local(); // representa algafood.storage.local
+    private S3 s3 = new S3(); // representa algafood.storage.S3
 
     @Getter
     @Setter
@@ -34,7 +36,8 @@ public class StorageProperties {
 
         private String bucket; // Esse atributo representa algafood.storage.s3.bucket
 
-        private String regiao; // Esse atributo representa algafood.storage.s3.regiao
+        //Region da Amazon fornece uma enumeração com as regioes
+        private Regions regiao; // Esse atributo representa algafood.storage.s3.regiao
 
         private String diretorioFotos; // Esse atributo representa algafood.storage.s3.diretorio-fotos
     }
