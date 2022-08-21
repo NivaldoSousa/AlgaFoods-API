@@ -11,6 +11,7 @@ import com.algaworks.algafood.domain.service.CatalogoFotoProdutoService;
 import com.algaworks.algafood.domain.service.FotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 /*
@@ -74,9 +74,10 @@ public class RestauranteProdutoFotoController {
 
     /*
      * @RequeRequestHeader -> essa anotação é possivel especificar o accept obtendo o seu valor da requisição atribuindo a variavel acceptHeader
+     * retorno pode ser tanto um InputStream ou uma URL
      * */
     @GetMapping
-    public ResponseEntity<InputStreamResource> servirFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId,
+    public ResponseEntity<?> servirFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId,
                                                           @RequestHeader(name = "accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
 
         try {
@@ -89,10 +90,17 @@ public class RestauranteProdutoFotoController {
 
             verificarCompatibilidadeMediaType(mediaTypeFoto, mediaTypesAceitas);
 
-            InputStream inputStream = fotoStorageService.recuperar(fotoProduto.getNomeArquivo());
+            FotoStorageService.FotoRecuperada fotoRecuperada = fotoStorageService.recuperar(fotoProduto.getNomeArquivo());
 
-            //retorna no corpo da requisição um InputStreamResource apartir do inputStream -> a foto que esta armazenada
-            return ResponseEntity.ok().contentType(mediaTypeFoto).body(new InputStreamResource(inputStream));
+            if (fotoRecuperada.temUrl()) {
+                return ResponseEntity
+                        .status(HttpStatus.FOUND) //resposta http de status encontrado
+                        .header(HttpHeaders.LOCATION, fotoRecuperada.getUrl()) // informa uma url de redirecionamento informando a url da foto recuperada
+                        .build();
+            } else {
+                //retorna no corpo da requisição um InputStreamResource apartir do inputStream -> a foto que esta armazenada
+                return ResponseEntity.ok().contentType(mediaTypeFoto).body(new InputStreamResource(fotoRecuperada.getInputStream()));
+            }
         } catch (EntidadeNaoEncontradaException e) {
             //caso nao tenha a foto dando uma exception no buscar ou falhar sera capturada a exception para informar o usuario
             //que nao foi encontrada a foto 404 not found

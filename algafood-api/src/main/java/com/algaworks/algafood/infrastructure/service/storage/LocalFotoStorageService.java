@@ -47,14 +47,16 @@ public class LocalFotoStorageService implements FotoStorageService {
     }
 
     @Override
-    public InputStream recuperar(String nomeArquivo) {
+    public FotoRecuperada recuperar(String nomeArquivo) {
 
         try {
             //caminho da pasta + nome arquivo onde será removido
             Path arquivoPath = getArquivoPath(nomeArquivo);
 
+            FotoRecuperada fotoRecuperada = FotoRecuperada.builder().inputStream(Files.newInputStream(arquivoPath)).build();
+
             //criar um novo inputStream buscando o arquivo apartir do path
-            return Files.newInputStream(arquivoPath);
+            return fotoRecuperada;
         } catch (Exception e) {
             throw new StorageException("Não foi possível recuperar o arquivo", e);
         }

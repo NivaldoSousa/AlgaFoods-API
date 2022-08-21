@@ -10,7 +10,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
+import java.net.URL;
 
 @Service
 public class S3FotoStorageService implements FotoStorageService {
@@ -51,13 +51,6 @@ public class S3FotoStorageService implements FotoStorageService {
         }
     }
 
-    /*
-    * retorna a String formatada com o nome do caminho da pasta criada na amazon com o nome da foto
-    * */
-    private String getCaminhoArquivo(String nomeArquivo) {
-        return String.format("%s/%s", storageProperties.getS3().getDiretorioFotos(), nomeArquivo);
-    }
-
     @Override
     public void remover(String nomeArquivo) {
 
@@ -74,7 +67,18 @@ public class S3FotoStorageService implements FotoStorageService {
     }
 
     @Override
-    public InputStream recuperar(String nomeArquivo) {
-        return null;
+    public FotoRecuperada recuperar(String nomeArquivo) {
+        String caminhoArquivo = getCaminhoArquivo(nomeArquivo);
+
+        //retorna a url atraves do nome do bucket e o caminho da pasta mais o nome do arquivo
+        URL url = amazonS3.getUrl(storageProperties.getS3().getBucket(), caminhoArquivo); // o metodo getUrl somente montar a url atraves do bucket e o caminho do arquivo, nao faz uma requisição para API da amazon retorna a url
+        return FotoRecuperada.builder().url(url.toString()).build();
+    }
+
+    /*
+     * retorna a String formatada com o nome do caminho da pasta criada na amazon com o nome da foto
+     * */
+    private String getCaminhoArquivo(String nomeArquivo) {
+        return String.format("%s/%s", storageProperties.getS3().getDiretorioFotos(), nomeArquivo);
     }
 }

@@ -13,7 +13,7 @@ public interface FotoStorageService {
 
     void remover(String nomeArquivo);
 
-    InputStream recuperar (String nomeArquivo);
+    FotoRecuperada recuperar (String nomeArquivo);
 
     default void substituir(String nomeArquivoAntigo, NovaFoto novaFoto){
 
@@ -41,5 +41,23 @@ public interface FotoStorageService {
         private String nomeArquivo;
         private String contentType; // tipo de arquivo ex: jpeg, png etc
         private InputStream inputStream; //fluxo de dados de entrada de um arquivo
+    }
+    /*
+    * Responsavel por retornar a URL da foto armazenada na AWS S3
+    * e tambem responsavel por retornar o InputStream quando a foto for armazenada localmente
+    * */
+    @Getter
+    @Builder
+    class FotoRecuperada{
+        private InputStream inputStream;
+        private String url;
+
+        public boolean temUrl(){
+            return url != null;
+        }
+
+        public boolean temInputStream(){
+            return inputStream != null;
+        }
     }
 }
