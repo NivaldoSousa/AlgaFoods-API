@@ -1613,3 +1613,16 @@ ________________________________________________________________________________
 Para ter acesso API da amazon é necessario ter a chave de acesso, para quando formos implementar no codigo chava precisaremos dela.
 para isso caso ainda nao tenha um chave de acesso é necessario criar um nova, para isso basta ir em "Criar chave de acesso"
 no caminho: IAM -> Usuários -> algaFood
+
+_______________________________________________________________________________________________________________________________________________________
+
+14.23. Implementando a inclusão de objetos no bucket da Amazon S3
+
+Por padrao a url que fica disponibilizada depois da gravação do arquivo na aws fica restrita publicamente,
+para isso devemos acrescentar mais um parametro ao pay-load da requisição no putObjetctRequest
+que seria o withCannedAcl(CannedAccessControlList.PublicRead) -> neste caso na hora da requisição estamos habilitando a leitura publica do arquivo
+
+caso tenha problema: The bucket does not allow ACLs
+propriedades do bucket > persmissões > prorpiedade de objeto > editar
+
+mudar para "ACLs habilitadas".

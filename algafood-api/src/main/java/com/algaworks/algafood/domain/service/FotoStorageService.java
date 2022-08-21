@@ -39,6 +39,7 @@ public interface FotoStorageService {
     @Builder
     class NovaFoto{
         private String nomeArquivo;
+        private String contentType; // tipo de arquivo ex: jpeg, png etc
         private InputStream inputStream; //fluxo de dados de entrada de um arquivo
     }
 }
