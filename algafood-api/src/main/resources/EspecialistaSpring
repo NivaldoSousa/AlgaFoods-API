@@ -1641,3 +1641,8 @@ Usaremos o valor da propriedade algafood.storage.tipo como condição para a cri
 Então se o valor da propriedade algafood.storage.tipo for "s3", o bean será criado, caso contrário ele não será criado.
 
 _______________________________________________________________________________________________________________________________________________________
+
+15.1. Conhecendo soluções para envio de e-mails transacionais
+
+Emails transacionais sao emails enviados apartir de um evento, algo relacionado a aplicação
+para conseguir fazer os envios é preciso ter um servidor SMTP e para isso existem varias ferramentas entre elas a Amazon Simple Email Servicebloc
