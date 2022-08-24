@@ -20,6 +20,12 @@ public class StorageProperties {
 
     private Local local = new Local(); // representa algafood.storage.local
     private S3 s3 = new S3(); // representa algafood.storage.S3
+    private TipoStorage tipo = TipoStorage.LOCAL; // representa o tipo de serviço de armazenamento que sera chamado gravar o arquivo
+
+    @Getter
+    public enum TipoStorage {
+        LOCAL, S3
+    }
 
     @Getter
     @Setter

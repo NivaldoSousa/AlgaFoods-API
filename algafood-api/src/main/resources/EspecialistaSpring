@@ -1626,3 +1626,18 @@ caso tenha problema: The bucket does not allow ACLs
 propriedades do bucket > persmissões > prorpiedade de objeto > editar
 
 mudar para "ACLs habilitadas".
+
+_______________________________________________________________________________________________________________________________________________________
+
+14.26. Selecionando a implementação do serviço de storage de fotos
+
+Se não definirmos os valores das propriedades algafood.storage.s3.id-chave-acesso ou algafood.storage.s3.chave-acesso-secreta, pode gerar um erro na inicialização da aplicação
+por isso adicionaremos a anotação abaixo
+
+OBS. SOBRE A ANOTAÇÃO @ConditionalOnProperty(name = "algafood.storage.tipo", havingValue = "s3")
+@ConditionalOnProperty, que faz com que o bean seja criado apenas se uma condição for satisfeita.
+
+Usaremos o valor da propriedade algafood.storage.tipo como condição para a criação do bean "amazonS3".
+Então se o valor da propriedade algafood.storage.tipo for "s3", o bean será criado, caso contrário ele não será criado.
+
+_______________________________________________________________________________________________________________________________________________________
