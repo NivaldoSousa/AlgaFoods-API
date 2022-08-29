@@ -12,11 +12,22 @@ public class FluxoPedidoService {
     @Autowired
     private EmissaoPedidoService emissaoPedidoService;
 
+    @Autowired
+    private EnvioEmailService envioEmailService;
+
     @Transactional
     public void confirmar(String codigoPedido) {
 
         Pedido pedido = emissaoPedidoService.buscarOuFalhar(codigoPedido);
         pedido.confirmar();
+
+        //Criando o objeto que sera enviado para o serviço de envio de email
+        var mesagem = EnvioEmailService.Mensagem.builder()
+                .assunto(pedido.getRestaurante().getNome() + " - Pedido confirmado")
+                .corpo("O pedido de código <strong>" + pedido.getCodigo() + "<strong> foi confirmado!") // a tag <strong> esta sendo colocada pois configuramos o corpo do email seja do tipo HTML
+                .destinatario(pedido.getCliente().getEmail()).build();
+
+        envioEmailService.enviar(mesagem);
     }
 
     @Transactional

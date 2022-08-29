@@ -1646,3 +1646,17 @@ ________________________________________________________________________________
 
 Emails transacionais sao emails enviados apartir de um evento, algo relacionado a aplicação
 para conseguir fazer os envios é preciso ter um servidor SMTP e para isso existem varias ferramentas entre elas a Amazon Simple Email Servicebloc
+
+_______________________________________________________________________________________________________________________________________________________
+
+15.3. Implementando o serviço de infraestrutura de envio de e-mails com Spring
+
+Para enviar email é preciso add uma dependencia do spring.
+spring-boot-starter-mail
+
+com isso temos acesso ao metodos de envio da classe JavaMailSender
+para enviar temos que montar o objeto MimeMessage
+que será enviado pelo metodo JavaMailSender.send passando o MimeMessage
+
+_______________________________________________________________________________________________________________________________________________________
+
