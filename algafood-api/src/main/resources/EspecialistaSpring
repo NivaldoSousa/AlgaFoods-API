@@ -1669,3 +1669,19 @@ no application.properties "spring.freemarker.template-loader-path"
 Para criarmos um template usando o HTML e Java utilizaremos a biblioteca Apache FreeMarker, onde ele
 faz o processamento unindo objetos java com o HTML para ser criado templates dinamicos para fazer o envio de
 email personalizados, no HTML utilizaremos expressoes fazendo o bind com o objeto java
+
+_______________________________________________________________________________________________________________________________________________________
+
+15.7. Formatando valores monetários com FTL
+
+para usar o padrao da moeda real, basta usar na expressao onde sao exibidos os valores "?string.currency"
+exemplo pratico
+
+${item.precoTotal?string.currency}
+
+e para o valor ficar formatado no padrao do brasil precisa add uma configuração no application.properties de localidade
+
+#Configurando uma localidade para o freemarker trabalha com padroes brasileiros assim como formatação monetaria
+spring.freemarker.settings.locale=pt_BR
+
+_______________________________________________________________________________________________________________________________________________________
