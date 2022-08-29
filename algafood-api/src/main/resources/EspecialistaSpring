@@ -1660,3 +1660,12 @@ que será enviado pelo metodo JavaMailSender.send passando o MimeMessage
 
 _______________________________________________________________________________________________________________________________________________________
 
+15.5. Processando template do corpo de e-mails com Apache FreeMarker
+
+Criaremos um HTML para criar o template para o envio do e-mail
+para isso criaremos uma pasta com nome padrao "templates", mas caso queira alterar basta add a propriedade
+no application.properties "spring.freemarker.template-loader-path"
+
+Para criarmos um template usando o HTML e Java utilizaremos a biblioteca Apache FreeMarker, onde ele
+faz o processamento unindo objetos java com o HTML para ser criado templates dinamicos para fazer o envio de
+email personalizados, no HTML utilizaremos expressoes fazendo o bind com o objeto java

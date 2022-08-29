@@ -107,9 +107,16 @@
 			<version>${aws-java-sdk-s3.version}</version>
 		</dependency>
 
+		<!-- Biblioteca para montar o serviço de e-mail-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
+		<!-- Biblioteca para montar o template do e-mail-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
 	</dependencies>
 
