@@ -2,6 +2,9 @@ package com.algaworks.algafood.infrastructure.service.email;
 
 import lombok.extern.slf4j.Slf4j;
 
+/*
+* Classe de serviço responsavel por fazer a simulação do envio fazendo o log no console
+* */
 @Slf4j //Essa anotação cria uma variavel "log", onde podemos usar para informar no console
 public class FakeEnvioEmailService extends SmtpEnvioEmailService {
 

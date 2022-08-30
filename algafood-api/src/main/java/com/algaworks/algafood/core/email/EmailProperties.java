@@ -25,7 +25,17 @@ public class EmailProperties {
     // Isso evita o problema de enviar e-mails de verdade caso você esqueça de definir a propriedade
     private Implementacao impl = Implementacao.FAKE;
 
+    private Sandbox sandbox = new Sandbox();
+
     public enum Implementacao {
-        SMTP, FAKE
+        SMTP, FAKE, SANDBOX
+    }
+
+    @Getter
+    @Setter
+    public class Sandbox {
+
+        private String destinatario;
+
     }
 }

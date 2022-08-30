@@ -7,9 +7,9 @@ import freemarker.template.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 public class SmtpEnvioEmailService implements EnvioEmailService {
@@ -29,21 +29,27 @@ public class SmtpEnvioEmailService implements EnvioEmailService {
     @Override
     public void enviar(Mensagem mensagem) {
         try {
-            String corpo = processarTemplate(mensagem);
-
-            MimeMessage mimeMessage = mailSender.createMimeMessage(); // Classe que irá conter o corpo e assunto do email
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8"); // Classe auxiliar para montar o MimeMessage colocando o corpo, assunto do email, UTF-8 para nao ter problemas de encode
-
-            helper.setFrom(emailProperties.getRemetente());
-            helper.setTo(mensagem.getDestinatarios().toArray(new String[0])); //lista contendo os destinatarios para serem enviados
-            helper.setSubject(mensagem.getAssunto());
-            helper.setText(corpo, true); // true pq estamos dizendo que o corpo do email é em HTML
+            MimeMessage mimeMessage = criarMimeMessage(mensagem);
 
             mailSender.send(mimeMessage);
 
         } catch (Exception e) {
             throw new EmailException("Não foi possivel enviar e-mail", e);
         }
+    }
+
+    protected MimeMessage criarMimeMessage(Mensagem mensagem) throws MessagingException {
+        String corpo = processarTemplate(mensagem);
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage(); // Classe que irá conter o corpo e assunto do email
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8"); // Classe auxiliar para montar o MimeMessage colocando o corpo, assunto do email, UTF-8 para nao ter problemas de encode
+
+        helper.setFrom(emailProperties.getRemetente());
+        helper.setTo(mensagem.getDestinatarios().toArray(new String[0])); //lista contendo os destinatarios para serem enviados
+        helper.setSubject(mensagem.getAssunto());
+        helper.setText(corpo, true); // true pq estamos dizendo que o corpo do email é em HTML
+
+        return mimeMessage;
     }
 
     protected String processarTemplate(Mensagem mensagem){
