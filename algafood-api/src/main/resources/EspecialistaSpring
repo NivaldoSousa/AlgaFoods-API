@@ -1686,3 +1686,19 @@ spring.freemarker.settings.locale=pt_BR
 
 _______________________________________________________________________________________________________________________________________________________
 
+15.10. Conhecendo o padrão Domain Events do DDD
+
+Domain Events, são eventos que fazem sentido para o domínio, ou seja, coisas que precisam acontecer quando determinada ação ocorre,
+por exemplo, um sistema de transportes, poderíamos ter eventos como: “carga entregue”, “carga em transporte” ou “carga em separação”.
+E explicando um pouco a introdução, dizemos que Domain Events são um tipo de mensagem que descreve algo que aconteceu no passado que é de interesse do negócio,
+usamos isso para separar todas as preocupações técnicas do domínio, com isso, suas operações de escrita ficam todas encapsuladas em comandos na forma de enventos.
+
+_______________________________________________________________________________________________________________________________________________________
+
+15.11. Publicando Domain Events a partir do Aggregate Root
+
+AbstractAggregateRoot é uma classe do spring data onde temos metodos como o registerEvent(T event)
+onde ele registra eventos que devem ser publicados ou seja disparados quando um objeto de dominio é salvo em banco por exemplo
+
+Para o evento ser disparado é necessario usar o repositorio chamando o método save, pois somente assim o evento é disparado
+mesmo sendo em um metodo transacional

@@ -1,6 +1,7 @@
 package com.algaworks.algafood.domain.service;
 
 import com.algaworks.algafood.domain.model.Pedido;
+import com.algaworks.algafood.domain.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ public class FluxoPedidoService {
     private EmissaoPedidoService emissaoPedidoService;
 
     @Autowired
-    private EnvioEmailService envioEmailService;
+    private PedidoRepository pedidoRepository;
 
     @Transactional
     public void confirmar(String codigoPedido) {
@@ -21,14 +22,7 @@ public class FluxoPedidoService {
         Pedido pedido = emissaoPedidoService.buscarOuFalhar(codigoPedido);
         pedido.confirmar();
 
-        //Criando o objeto que sera enviado para o serviço de envio de email
-        var mesagem = EnvioEmailService.Mensagem.builder()
-                .assunto(pedido.getRestaurante().getNome() + " - Pedido confirmado")
-                .corpo("pedido-confirmado.html") // nome do arquivo html na pasta templates
-                .variavel("pedido", pedido) // map com a variavel que sera usada no html(template) com o objeto Pedido
-                .destinatario(pedido.getCliente().getEmail()).build();
-
-        envioEmailService.enviar(mesagem);
+        pedidoRepository.save(pedido); // precisa chamar o save mesmo sendo um metodo transacional pois irá disparar o evento do metodo confirmar()
     }
 
     @Transactional
