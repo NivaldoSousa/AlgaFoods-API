@@ -1,83 +1,3 @@
-O que é JPA e Hibernate?
-
-ORM significa mapeamento objeto-relacional que significa facilitar o trabalho do desenvolvedor de fazer inserts e pesquisar no banco de dados.
-
-JPA é uma especificação Java EE para uma soluçao ORM para persistencia de dados com ela temos uma API de consulta e persistencia de dados, 
-com ela usamos anotaçoes com @Entity, @Table, @Column e entre outros
-
-Hibernate é uma implementaçao da especificaçao do JPA
-
-
-________________________________________________________________________________________________________________________________________________________________
-
-JUnit
-
-O que é teste unitario?
-Basicamente e testa a entrada e a saida de um sistema, validando os dados inseridos.
-
-@Test e anotaçao onde indica que aquele metodo e um teste
-@Before é sempre chamado antes de um teste ser realizado
-@After é p que é realizado por fim de cada teste.
-
-Assertivas sao utilizadas para comparar os valores esperados com os recebidos.
-AssertEquals: verifica se os valores sao iguais.
-AssertNotEquals: verifica se os valores sao diferentes.
-AssertNull: verifica se o valor passado é null.
-AssertNotNull:Verifica se o valor passado não é nulo.
-
-Entre outras assert
-
-________________________________________________________________________________________________________________________________________________________________
-
-Metodologia Scrum
-
-O que é scrum?
-busca promover maneiras de alcançar otimos resultados de produtividade atraves do gerenciamento de tarefas e projetos, ajudando a equipe
-a realizarem projetos de maneira fluida, dinamica e rapida.
-
-Scrum Master (Facilitador)
- Líder da equipe
- Tem a função é remover impedimentos para que a equipe atinja os objetivos
-
-Team
- Responsável por entregar o produto
-
-
-Tipos de reuniao: Planning onde sao apresentados as tarefas e estimativa dos mesmos para inciar a sprint
-                  Daily onde temos uma rapida reuniao precisamente 15 minutos onde os devs informam o andamento das tarefas se caso houver sao apontados impedimentos, 
-				  Reviews onde todas as terefas da sprint sao apresentas para o P.O para fazer um overview de tudo, e dizer o desempenho do time nessa sprint
-
-________________________________________________________________________________________________________________________________________________________________
-
-O que significa extender de uma classe?
-
-Usa-se implements quando você deseja implementar uma interface. Não implementa-se classes. Implementa-se apenas interfaces. 
-Uma interface "firma um contrato" entre classes em que define comportamentos (métodos) que devem ser sobrescritos pela classe que os herda (se essa for uma classe concreta).
-
-_____________________________________________________________________________________________________________________________________________________________
-
-O que significa extender de uma classe?
-
-Usa-se extends quando você deseja aplicar herança á sua classe. 
-Quando falamos que a classe A estende a classe B , significa que A herda alguns (ou todos) métodos e atributos da classe B
-__________________________________________________________________________________________________________________________________________________________________
-
-Qual a diferença entre extends e implements Java?
-
-Ambas as palavras-chave são usadas ao criar sua própria nova classe na linguagem Java. 
-Diferença: 
-- implements significa que você está usando os elementos de uma interface Java em sua classe. 
-- extends significa que você está criando uma subclasse da classe base que está estendendo.
-
-__________________________________________________________________________________________________________________________________________________________________
-
-O que é uma estrutura de dados?
-
-Uma sequência de passos computacionais que transforma uma entrada em uma saída previamente determinada. 
-O meio para armazenar e organizar dados com o objetivo de facilitar o acesso e as modificações.
-
-__________________________________________________________________________________________________________________________________________________________________
-
 Aula 2.20 Mudando o comportamento da aplicaçao com Sring Profiles
 
 A anotaçao @Profile serve para apontar qual tipo de perfil o spring devera usar, onde voce podera
@@ -1702,3 +1622,16 @@ onde ele registra eventos que devem ser publicados ou seja disparados quando um 
 
 Para o evento ser disparado é necessario usar o repositorio chamando o método save, pois somente assim o evento é disparado
 mesmo sendo em um metodo transacional
+
+_______________________________________________________________________________________________________________________________________________________
+
+15.12. Observando e reagindo a Domain Events
+
+Criaremos um metodo que fara o serviço como no exemplo envio de email esse metodo sera anotado com o  @EventListener
+essa anotação marca o metodo como um listener ou seja ele reagi ao evento quando for lançado
+Entao toda vez que um pedido por salvo no banco ele lançara um evento e esse metodo anotado com @EventListener
+ficará escutando e sera processado quando recebido
+
+com isso temos a facilidade de criar mais serviços atrelados a classe que representa um evento sem que haja impactos no sistema
+
+_______________________________________________________________________________________________________________________________________________________
