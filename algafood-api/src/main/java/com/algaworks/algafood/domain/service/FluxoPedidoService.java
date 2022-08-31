@@ -30,6 +30,8 @@ public class FluxoPedidoService {
 
         Pedido pedido = emissaoPedidoService.buscarOuFalhar(codigoPedido);
         pedido.cancelar();
+
+        pedidoRepository.save(pedido); // precisa chamar o save mesmo sendo um metodo transacional pois irá disparar o evento do metodo cancelar()
     }
 
     @Transactional

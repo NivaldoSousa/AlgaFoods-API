@@ -6,6 +6,8 @@ import com.algaworks.algafood.domain.service.EnvioEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 /*
 * Classe responsavel por reagir a um evento quando disparado
@@ -19,7 +21,7 @@ public class NotificacaoClientePedidoConfirmadoListener {
     /*
     * Responsavel reagir ao evento apos o save do Pedido fazendo o envio do e-mail
     * */
-    @EventListener // essa anotação marca o metodo como um listener ou seja ele reagi ao evento quando for lançado
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT) // será processado o evento apos o commit no banco  phase = TransactionPhase.BEFORE_COMMIT -> será concluido o processamento do evento caso ambos os metodos save e aoConfirmarPedido seja concluidos com sucesso
     public void aoConfirmarPedido(PedidoConfirmadoEvent event){
 
         Pedido pedido = event.getPedido();

@@ -1635,3 +1635,14 @@ ficará escutando e sera processado quando recebido
 com isso temos a facilidade de criar mais serviços atrelados a classe que representa um evento sem que haja impactos no sistema
 
 _______________________________________________________________________________________________________________________________________________________
+
+15.13. Reagindo a Domain Events em fases específicas da transação
+
+Quando temos um metodo anotado com @EventListener ele processa um passo antes de flush na hora do save do objeto ou seja no serviço de envio de e-mail
+ele envia o e-mail antes do save do pedido, isso se torna um problema pois caso haja algum erro durante o save o e-mail foi disparado
+Para solucionar isso usamos a anotação @TransactionalEventListener
+Essa anotação faz com que so seja processado o evento apos o commit feito no banco.
+
+Mas caso queira amarrar as transações do save e envio de email, por exemplo em caso de erro em algum deles é feito o rollback
+basta especificar a @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+com isso ele so ira concluir o processamento do evento caso ambos os serviço sejam concluidos com sucesso
