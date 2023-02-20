@@ -20,6 +20,7 @@
 		<jasperreports.version>6.20.0</jasperreports.version>
 		<jasperreports.functions>6.20.0</jasperreports.functions>
 		<aws-java-sdk-s3.version>1.11.671</aws-java-sdk-s3.version>
+		<springfox.version>2.9.2</springfox.version>
 	</properties>
 
 	<dependencies>
@@ -118,6 +119,18 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>${springfox.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>${springfox.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -131,5 +144,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

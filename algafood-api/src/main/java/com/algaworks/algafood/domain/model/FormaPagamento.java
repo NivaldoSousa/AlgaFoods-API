@@ -8,6 +8,9 @@ import javax.persistence.Id;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.OffsetDateTime;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -21,5 +24,8 @@ public class FormaPagamento {
 	
 	@Column(nullable = false)
 	private String descricao;
+
+	@UpdateTimestamp //Essa anotação faz com que, sempre que haja alguma mudança nessa tabela que seja insert, update ou delete esse atributo é populado a data atual sendo gravada no banco.
+	private OffsetDateTime dataAtualizacao;
 	
 }
