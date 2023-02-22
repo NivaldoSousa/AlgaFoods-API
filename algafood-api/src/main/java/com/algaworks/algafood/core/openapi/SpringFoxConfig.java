@@ -1,5 +1,7 @@
 package com.algaworks.algafood.core.openapi;
 
+import com.algaworks.algafood.api.exceptionhandler.Problem;
+import com.fasterxml.classmate.TypeResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -11,6 +13,7 @@ import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.ResponseMessage;
@@ -35,6 +38,9 @@ public class SpringFoxConfig implements WebMvcConfigurer { //essa interface WebM
      * */
     @Bean
     public Docket apiDocket() {
+
+        var typeResolver = new TypeResolver();
+
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.algaworks.algafood.api")) //Seleciona qual parte do projeto irá ser escaneado para gerar as definições, RequestHandlerSelectors.basePackage() estamos dizendo para ele escanear somente esse pacote.
@@ -44,6 +50,7 @@ public class SpringFoxConfig implements WebMvcConfigurer { //essa interface WebM
                 .globalResponseMessage(RequestMethod.POST, globalPostPutResponseMessages()) // criar de forma global a resposta da API para todos os metodos POST
                 .globalResponseMessage(RequestMethod.PUT, globalPostPutResponseMessages()) // criar de forma global a resposta da API para todos os metodos PUT
                 .globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages()) // criar de forma global a resposta da API para todos os metodos DELETE
+                .additionalModels(typeResolver.resolve(Problem.class)) // adiciona um model extra nas configurações do swagger
                 .apiInfo(apiInfo())
                 .tags(new Tag("Cidades", "Gerencia as cidades")); // passando as informações apartir do metodo apiInfo()
     }
@@ -52,14 +59,17 @@ public class SpringFoxConfig implements WebMvcConfigurer { //essa interface WebM
      * Criar uma lista de retornos padroes da API para todos os metogos POST e PUT
      * */
     private List<ResponseMessage> globalPostPutResponseMessages() {
+
         return Arrays.asList(
                 new ResponseMessageBuilder()
                         .code(HttpStatus.BAD_REQUEST.value())
                         .message("Requisição inválida (erro do cliente)")
+                        .responseModel(new ModelRef("Problema")) // referencia um modelo de representação em caso de erro, onde pegamos o nome da classe apartir da anotação @ApiModel
                         .build(),
                 new ResponseMessageBuilder()
                         .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
                         .message("Erro interno no servidor")
+                        .responseModel(new ModelRef("Problema")) // referencia um modelo de representação em caso de erro, onde pegamos o nome da classe apartir da anotação @ApiModel
                         .build(),
                 new ResponseMessageBuilder()
                         .code(HttpStatus.NOT_ACCEPTABLE.value())
@@ -68,6 +78,7 @@ public class SpringFoxConfig implements WebMvcConfigurer { //essa interface WebM
                 new ResponseMessageBuilder()
                         .code(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()) //code 415
                         .message("Requisição recusada porque o corpo está em um formato não suportado")
+                        .responseModel(new ModelRef("Problema")) // referencia um modelo de representação em caso de erro, onde pegamos o nome da classe apartir da anotação @ApiModel
                         .build()
         );
     }
@@ -76,14 +87,17 @@ public class SpringFoxConfig implements WebMvcConfigurer { //essa interface WebM
      * Criar uma lista de retornos padroes da API para todos os metogos DELETE
      * */
     private List<ResponseMessage> globalDeleteResponseMessages() {
+
         return Arrays.asList(
                 new ResponseMessageBuilder()
                         .code(HttpStatus.BAD_REQUEST.value())
                         .message("Requisição inválida (erro do cliente)")
+                        .responseModel(new ModelRef("Problema")) // referencia um modelo de representação em caso de erro, onde pegamos o nome da classe apartir da anotação @ApiModel
                         .build(),
                 new ResponseMessageBuilder()
                         .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
                         .message("Erro interno no servidor")
+                        .responseModel(new ModelRef("Problema")) // referencia um modelo de representação em caso de erro, onde pegamos o nome da classe apartir da anotação @ApiModel
                         .build()
         );
     }
@@ -92,6 +106,7 @@ public class SpringFoxConfig implements WebMvcConfigurer { //essa interface WebM
     * Criar uma lista de retornos padroes da API para todos os metogos GET
     * */
     private List<ResponseMessage> globalGetResponseMessages(){
+
         return Arrays.asList(new ResponseMessageBuilder().code(HttpStatus.INTERNAL_SERVER_ERROR.value()) //code 500
                 .message("Erro interno do servidor")
                 .build(), new ResponseMessageBuilder().code(HttpStatus.NOT_ACCEPTABLE.value()) //code 406
@@ -103,6 +118,7 @@ public class SpringFoxConfig implements WebMvcConfigurer { //essa interface WebM
     * Descreve informações da API na documentação, ou seja, na interafce grafica do swagger
     * */
     public ApiInfo apiInfo(){
+
         return new ApiInfoBuilder()
                 .title("AlgaFood API")
                 .description("API aberta para clientes e restaurantes")
