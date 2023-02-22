@@ -52,7 +52,8 @@ public class SpringFoxConfig implements WebMvcConfigurer { //essa interface WebM
                 .globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages()) // criar de forma global a resposta da API para todos os metodos DELETE
                 .additionalModels(typeResolver.resolve(Problem.class)) // adiciona um model extra nas configurações do swagger
                 .apiInfo(apiInfo())
-                .tags(new Tag("Cidades", "Gerencia as cidades")); // passando as informações apartir do metodo apiInfo()
+                .tags(new Tag("Cidades", "Gerencia as cidades"), // passando as informações apartir do metodo apiInfo()
+                        new Tag("Grupos", "Gerencia os grupos de usuários"));
     }
 
     /*

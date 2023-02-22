@@ -24,8 +24,7 @@ public interface CidadeControllerOpenApi {
     public CidadeModel buscar(@ApiParam(value = "ID de uma cidade", example = "1") Long cidadeId);
 
     @ApiOperation("Cadastra uma cidade") //Muda a assinatura do metodo no swagger
-    @ApiResponses({@ApiResponse(code = 201, message = "Cidade cadastrada")})
-    // Customiza os codigos de retorno da API de forma individual
+    @ApiResponses({@ApiResponse(code = 201, message = "Cidade cadastrada")})// Customiza os codigos de retorno da API de forma individual
     public CidadeModel adicionar(@ApiParam(name = "corpo", value = "Representação de uma nova cidade") CidadeInput cidadeInput);
 
     @ApiOperation("Atualiza uma cidade por ID") //Muda a assinatura do metodo no swagger
