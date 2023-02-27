@@ -18,7 +18,7 @@ public interface CidadeControllerOpenApi {
     @ApiOperation("Lista as cidades") //Muda a assinatura do metodo no swagger
     public List<CidadeModel> listar();
 
-    @ApiOperation("Busca uma cidade por ID")
+    @ApiOperation("Busca uma cidade por ID") //Muda a assinatura do metodo no swagger
     @ApiResponses({@ApiResponse(code = 400, message = "ID da cidade inválido", response = Problem.class), // Customiza os codigos de retorno da API de forma individual
             @ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)})
     public CidadeModel buscar(@ApiParam(value = "ID de uma cidade", example = "1") Long cidadeId);
