@@ -5,6 +5,7 @@ import com.algaworks.algafood.api.assembler.RestauranteModelAssembler;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
 import com.algaworks.algafood.api.model.view.RestauranteView;
+import com.algaworks.algafood.api.openapi.model.RestauranteBasicoModelOpenApi;
 import com.algaworks.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
@@ -13,6 +14,9 @@ import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 import com.fasterxml.jackson.annotation.JsonView;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -69,6 +73,7 @@ public class RestauranteController {
 	 * @JsonView -> Estamos dizendo que irá apresentar uma view do restauranteModel
 	 *  params = "projecao=apenas-nome" -> Caso passe na chave projecao o valor resumo ele chama esse endpoint
 	 * */
+	@ApiOperation(value = "Lista resturantes", hidden = true) // atributo hidden faz com que o método fique invisivel na documentação
 	@JsonView(RestauranteView.ApenasNome.class)
 	@GetMapping(params = "projecao=apenas-nome")
 	public List<RestauranteModel> listaApenasNomes() {
@@ -78,6 +83,11 @@ public class RestauranteController {
 	/*
 	 * @JsonView -> Estamos dizendo que irá apresentar uma view do restauranteModel
 	 * */
+	@ApiOperation(value = "Lista resturantes", response = RestauranteBasicoModelOpenApi.class) // atributo response muda o objeto retornado na documentação, ao inves de retorna o RestauranteModel, irá ser o RestauranteBasicoModelOpenApi
+	@ApiImplicitParams({
+			@ApiImplicitParam(value = "Nome da projeção de pedidos", name = "projecao", allowableValues = "apenas-nome",
+					paramType = "query", type = "string")
+	})
 	@JsonView(RestauranteView.Resumo.class)
 	@GetMapping
 	public List<RestauranteModel> listar() {
