@@ -29,7 +29,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     private CadastroProdutoService cadastroProduto;
 
     @Autowired
-    private CadastroRestauranteService cadastroRestaurante;
+    private CadastroRestauranteService cadastroRestaurante; 
 
     @Autowired
     private ProdutoModelAssembler produtoModelAssembler;
