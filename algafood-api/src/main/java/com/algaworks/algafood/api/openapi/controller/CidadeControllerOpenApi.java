@@ -3,10 +3,8 @@ package com.algaworks.algafood.api.openapi.controller;
 import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.CidadeModel;
 import com.algaworks.algafood.api.model.input.CidadeInput;
-
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 /*
  * Interface responsável por manter as anotações de documentação do swagger de todos os metodos da classe CidadeController
@@ -17,7 +15,7 @@ public interface CidadeControllerOpenApi {
 
     @ApiOperation("Lista as cidades")
         //Muda a assinatura do metodo no swagger
-    List<CidadeModel> listar();
+    CollectionModel<CidadeModel> listar();
 
     @ApiOperation("Busca uma cidade por ID") //Muda a assinatura do metodo no swagger
     @ApiResponses({@ApiResponse(code = 400, message = "ID da cidade inválido", response = Problem.class), // Customiza os codigos de retorno da API de forma individual
