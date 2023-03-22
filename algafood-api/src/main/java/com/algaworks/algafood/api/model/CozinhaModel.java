@@ -3,13 +3,20 @@ package com.algaworks.algafood.api.model;
 import com.algaworks.algafood.api.model.view.RestauranteView;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 /*
  * Essa classe faz o papel do DTO, no caso CozinhaDTO
  * 
  * */
-@Data
-public class CozinhaModel {
+
+@Relation(collectionRelation = "cozinhas")
+@Setter
+@Getter
+public class CozinhaModel extends RepresentationModel<CozinhaModel> {
 
 	@JsonView(RestauranteView.Resumo.class) // Estamos dizendo que o atributo id faz parte da view de Restaurante
 	@ApiModelProperty(example = "1")

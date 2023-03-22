@@ -7,27 +7,27 @@ import com.algaworks.algafood.api.model.input.PedidoInput;
 import com.algaworks.algafood.api.model.input.PedidoModel;
 import com.algaworks.algafood.api.model.input.PedidoResumoModel;
 import com.algaworks.algafood.api.openapi.controller.PedidoControllerOpenApi;
+import com.algaworks.algafood.core.data.PageableTranslator;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
+import com.algaworks.algafood.domain.filter.PedidoFilter;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.PedidoRepository;
-import com.algaworks.algafood.domain.filter.PedidoFilter;
 import com.algaworks.algafood.domain.service.EmissaoPedidoService;
 import com.algaworks.algafood.infrastructure.repository.spec.PedidoSpec;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -47,6 +47,9 @@ public class PedidoController implements PedidoControllerOpenApi {
 
     @Autowired
     private PedidoInputDisassembler pedidoInputDisassembler;
+
+    @Autowired
+    private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
     @GetMapping("/{codigoPedido}")
     public PedidoModel buscar(@PathVariable String codigoPedido) {
@@ -79,16 +82,32 @@ public class PedidoController implements PedidoControllerOpenApi {
      * param -> @PageableDefault(size = 10) -> anotação que serve para dizer quantos elementos por default será retorna pela paginação
      * param -> Pageable -> Interface abstrata para informações de paginação
      * */
+    @Override
     @GetMapping
-    public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
+    public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
 
-        Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpec.usandoFiltro(filtro), pageable);
+        pageable = traduzirPageable(pageable);
 
-        List<PedidoResumoModel> pedidosResumoModel = pedidoResumoModelAssembler.toCollectionModel(pedidosPage.getContent()); // getContent extrai a lista de cozinha daquela pagina e devolve um List
+        Page<Pedido> pedidosPage = pedidoRepository.findAll(
+                PedidoSpec.usandoFiltro(filtro), pageable);
 
-        Page<PedidoResumoModel> pedidosResumoModelPage = new PageImpl<>(pedidosResumoModel, pageable, pedidosPage.getTotalElements()); // tranformando a list de PedidoResumoModel em um page
+        return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoModelAssembler);
+    }
 
-        return pedidosResumoModelPage;
+    private Pageable traduzirPageable(Pageable apiPageable) {
+        var mapeamento = Map.of(
+                "codigo", "codigo",
+                "subtotal", "subtotal",
+                "taxaFrete", "taxaFrete",
+                "valorTotal", "valorTotal",
+                "dataCriacao", "dataCriacao",
+                "restaurante.nome", "restaurante.nome",
+                "restaurante.id", "restaurante.id",
+                "cliente.id", "cliente.id",
+                "cliente.nome", "cliente.nome"
+        );
+
+        return PageableTranslator.translate(apiPageable, mapeamento);
     }
 
     /* FORMA DE FAZER UM FILTER DE CAMPOS COM @JsonFilter

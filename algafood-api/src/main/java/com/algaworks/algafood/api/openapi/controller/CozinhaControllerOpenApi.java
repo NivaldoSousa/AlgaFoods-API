@@ -4,8 +4,8 @@ import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.CozinhaModel;
 import com.algaworks.algafood.api.model.input.CozinhaInput;
 import io.swagger.annotations.*;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 /*
  * Interface responsável por manter as anotações de documentação do swagger de todos os metodos da classe CozinhaController
@@ -15,7 +15,7 @@ import org.springframework.data.domain.Pageable;
 public interface CozinhaControllerOpenApi {
 
     @ApiOperation("Lista as cozinhas com paginação")
-    Page<CozinhaModel> listar(Pageable pageable);
+    PagedModel<CozinhaModel> listar(Pageable pageable);
 
     @ApiOperation("Busca uma cozinha por ID") //Muda a assinatura do metodo no swagger
     @ApiResponses({

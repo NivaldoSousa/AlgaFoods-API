@@ -5,8 +5,7 @@ import com.algaworks.algafood.api.model.EstadoModel;
 import com.algaworks.algafood.api.model.input.EstadoInput;
 import com.algaworks.algafood.domain.model.Estado;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 /*
  * Interface responsável por manter as anotações de documentação do swagger de todos os metodos da classe EstadoController
@@ -16,7 +15,7 @@ import java.util.List;
 public interface EstadoControllerOpenApi {
 
     @ApiOperation("Lista os estados")
-    List<EstadoModel> listar();
+    CollectionModel<EstadoModel> listar();
 
     @ApiOperation("Busca um estado por ID")
     @ApiResponses({
