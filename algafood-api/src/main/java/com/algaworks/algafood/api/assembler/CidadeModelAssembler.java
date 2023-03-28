@@ -1,7 +1,7 @@
 package com.algaworks.algafood.api.assembler;
 
+import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.controller.CidadeController;
-import com.algaworks.algafood.api.controller.EstadoController;
 import com.algaworks.algafood.api.model.CidadeModel;
 import com.algaworks.algafood.domain.model.Cidade;
 import org.modelmapper.ModelMapper;
@@ -17,6 +17,9 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
 	@Autowired
 	private ModelMapper modelMapper;
 
+	@Autowired
+	private AlgaLinks algaLinks;
+
 	public CidadeModelAssembler(){
 		super(CidadeController.class, CidadeModel.class);
 	}
@@ -27,11 +30,8 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
 
 		modelMapper.map(cidade, cidadeModel);
 
-		//Monta os links
-		cidadeModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
-				.listar()).withSelfRel());
-		cidadeModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class)
-				.buscar(cidadeModel.getEstado().getId())).withSelfRel());
+		cidadeModel.add(algaLinks.linkToCidades("cidades"));
+		cidadeModel.getEstado().add(algaLinks.linkToEstado(cidadeModel.getEstado().getId()));
 
 		return cidadeModel;
 	}
