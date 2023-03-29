@@ -1,30 +1,17 @@
 package com.algaworks.algafood.domain.model;
 
+import com.algaworks.algafood.core.validation.ValorZeroIncluiDescricao;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import com.algaworks.algafood.core.validation.ValorZeroIncluiDescricao;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
 @Data
@@ -121,5 +108,37 @@ public class Restaurante {
 
 	public boolean naoAceitaFormaPagamento(FormaPagamento formaPagamento) {
 		return !aceitaFormaPagamento(formaPagamento);
+	}
+
+	public boolean isAberto() {
+		return this.aberto;
+	}
+
+	public boolean isFechado() {
+		return !isAberto();
+	}
+
+	public boolean isInativo() {
+		return !isAtivo();
+	}
+
+	public boolean isAtivo() {
+		return this.ativo;
+	}
+
+	public boolean aberturaPermitida() {
+		return isAtivo() && isFechado();
+	}
+
+	public boolean ativacaoPermitida() {
+		return isInativo();
+	}
+
+	public boolean inativacaoPermitida() {
+		return isAtivo();
+	}
+
+	public boolean fechamentoPermitido() {
+		return isAberto();
 	}
 }
