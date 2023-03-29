@@ -1,28 +1,27 @@
 package com.algaworks.algafood.api.controller;
 
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import javax.validation.Valid;
-
+import com.algaworks.algafood.api.assembler.FormaPagamentoInputDisassembler;
+import com.algaworks.algafood.api.assembler.FormaPagamentoModelAssembler;
+import com.algaworks.algafood.api.model.FormaPagamentoModel;
+import com.algaworks.algafood.api.model.input.FormaPagamentoInput;
 import com.algaworks.algafood.api.openapi.controller.FormaPagamentoControllerOpenApi;
+import com.algaworks.algafood.domain.model.FormaPagamento;
+import com.algaworks.algafood.domain.repository.FormaPagamentoRepository;
+import com.algaworks.algafood.domain.service.CadastroFormaPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.algaworks.algafood.api.assembler.FormaPagamentoInputDisassembler;
-import com.algaworks.algafood.api.assembler.FormaPagamentoModelAssembler;
-import com.algaworks.algafood.api.model.FormaPagamentoModel;
-import com.algaworks.algafood.api.model.input.FormaPagamentoInput;
-import com.algaworks.algafood.domain.model.FormaPagamento;
-import com.algaworks.algafood.domain.repository.FormaPagamentoRepository;
-import com.algaworks.algafood.domain.service.CadastroFormaPagamentoService;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
+
+import javax.validation.Valid;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping(path = "/formas-pagamento", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,7 +40,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
     private FormaPagamentoInputDisassembler formaPagamentoInputDisassembler;
 
     @GetMapping
-    public ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request) {
+    public ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest()); //desabilitatando o ShallowEtag para funcionar o DeepEtag. pois se nao desabilitar o filter do shallow ele vai substituir o resultado do codigo que iremos fazer.
 
         String etag = "0";
@@ -56,7 +55,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
         }
         List<FormaPagamento> todasFormasPagamentos = formaPagamentoRepository.findAll();
 
-        List<FormaPagamentoModel> formaPagamentosModel = formaPagamentoModelAssembler
+        CollectionModel<FormaPagamentoModel> formaPagamentosModel = formaPagamentoModelAssembler
                 .toCollectionModel(todasFormasPagamentos);
 
         return ResponseEntity.ok()
