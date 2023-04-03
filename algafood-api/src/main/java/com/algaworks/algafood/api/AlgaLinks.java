@@ -250,4 +250,39 @@ public class AlgaLinks {
     public Link linkToFotoProduto(Long restauranteId, Long produtoId) {
         return linkToFotoProduto(restauranteId, produtoId, IanaLinkRelations.SELF.value());
     }
+
+    public Link linkToGrupos(String rel) {
+        return WebMvcLinkBuilder.linkTo(GrupoController.class).withRel(rel);
+    }
+
+    public Link linkToGrupos() {
+        return linkToGrupos(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToGrupoPermissoes(Long grupoId, String rel) {
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(GrupoPermissaoController.class)
+                .listar(grupoId)).withRel(rel);
+    }
+
+    public Link linkToPermissoes(String rel) {
+        return WebMvcLinkBuilder.linkTo(PermissaoController.class).withRel(rel);
+    }
+
+    public Link linkToPermissoes() {
+        return linkToPermissoes(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToGrupoPermissoes(Long grupoId) {
+        return linkToGrupoPermissoes(grupoId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToGrupoPermissaoAssociacao(Long grupoId, String rel) {
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(GrupoPermissaoController.class)
+                .associar(grupoId, null)).withRel(rel);
+    }
+
+    public Link linkToGrupoPermissaoDesassociacao(Long grupoId, Long permissaoId, String rel) {
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(GrupoPermissaoController.class)
+                .desassociar(grupoId, permissaoId)).withRel(rel);
+    }
 }

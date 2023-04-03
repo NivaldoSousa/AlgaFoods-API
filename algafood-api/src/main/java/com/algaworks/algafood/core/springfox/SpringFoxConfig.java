@@ -1,10 +1,10 @@
 package com.algaworks.algafood.core.springfox;
 
+import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.CozinhaModel;
 import com.algaworks.algafood.api.model.input.PedidoResumoModel;
 import com.algaworks.algafood.api.openapi.model.CozinhasModelOpenApi;
 import com.algaworks.algafood.api.openapi.model.PageableModelOpenApi;
-import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.openapi.model.PedidosResumoModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.context.annotation.Bean;
@@ -84,7 +84,8 @@ public class SpringFoxConfig implements WebMvcConfigurer { //essa interface WebM
                         new Tag("Estados", "Gerencia os estados"),
                         new Tag("Produtos", "Gerencia os produtos de restaurantes"),
                         new Tag("Usuários", "Gerencia os usuários"),
-                        new Tag("Estatísticas", "Estatísticas da AlgaFood"));
+                        new Tag("Estatísticas", "Estatísticas da AlgaFood"),
+                        new Tag("Permissões", "Gerencia as permissões"));
     }
 
     /*
