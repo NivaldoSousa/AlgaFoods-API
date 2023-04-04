@@ -3,7 +3,6 @@ package com.algaworks.algafood.api.openapi.controller;
 import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
-import com.algaworks.algafood.api.openapi.model.RestauranteBasicoModelOpenApi;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +16,11 @@ import java.util.List;
 @Api(tags = "Restaurantes")
 public interface RestauranteControllerOpenApi {
 
-    @ApiOperation(value = "Lista restaurantes", response = RestauranteBasicoModelOpenApi.class)
+    @ApiOperation(value = "Lista restaurantes")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "apenas-nome",
                     name = "projecao", paramType = "query", type = "string")
     })
-   // @JsonView(RestauranteView.Resumo.class)
     CollectionModel<RestauranteModel> listar();
 
     @ApiOperation(value = "Lista restaurantes", hidden = true)// atributo response muda o objeto retornado na documentação, ao inves de retorna o RestauranteModel, irá ser o RestauranteBasicoModelOpenApi
