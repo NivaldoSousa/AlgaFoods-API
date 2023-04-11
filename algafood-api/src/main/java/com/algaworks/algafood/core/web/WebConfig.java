@@ -3,6 +3,7 @@ package com.algaworks.algafood.core.web;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -23,6 +24,14 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("*"); // Habilita os tipos de metodos que serão liberados ex: POST, GET, PUT
                // .allowedOrigins("*") // Habilita url
 
+    }
+
+    /*
+    * Por padrão caso o atributo Accept do Headers não seja informado pela requisição, será chamada o endpoint da V2
+    * */
+    @Override
+    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+        configurer.defaultContentType(AlgaMediaTypes.V2_APPLICATION_JSON);
     }
 
     /*
