@@ -7,7 +7,6 @@ import com.algaworks.algafood.api.v1.assembler.CidadeModelAssembler;
 import com.algaworks.algafood.api.v1.model.CidadeModel;
 import com.algaworks.algafood.api.v1.model.input.CidadeInput;
 import com.algaworks.algafood.api.v1.openapi.controller.CidadeControllerOpenApi;
-import com.algaworks.algafood.core.web.AlgaMediaTypes;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Cidade;
@@ -16,13 +15,14 @@ import com.algaworks.algafood.domain.service.CadastroCidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/cidades", produces = AlgaMediaTypes.V1_APPLICATION_JASON_VALUE) // no produces estamos customizado o MediaType para o versionamento desse controlado
+@RequestMapping(path = "/v1/cidades", produces = MediaType.APPLICATION_JSON_VALUE) // no produces estamos customizado o MediaType para o versionamento desse controlado
 public class CidadeController implements CidadeControllerOpenApi {
 
     @Autowired

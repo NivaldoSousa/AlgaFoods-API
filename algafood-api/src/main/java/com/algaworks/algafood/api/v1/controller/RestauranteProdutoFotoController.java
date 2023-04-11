@@ -28,7 +28,7 @@ import java.util.List;
  * End-Point para o serviço de upload da foto
  * */
 @RestController
-@RequestMapping(path = "restaurante/{restauranteId}/produtos/{produtoId}/foto", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/restaurante/{restauranteId}/produtos/{produtoId}/foto", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 
     @Autowired

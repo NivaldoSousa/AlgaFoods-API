@@ -44,7 +44,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
     * como teremos o mesmo caminho que no metodo "consultarVendasDiarias", so iremos
     * diferencia quando o usario especificar o accept informando o tipo de resposta da chamada
     * */
-    @GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(path = "/v1/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte []> consultarVendasDiariasPdf(VendaDiariaFilter filtro, @RequestParam(required = false, defaultValue = "+00:00") String timeOffset) {
 
         byte[] bytesPdf = vendaReportService.emitirVendasDiarias(filtro, timeOffset);
