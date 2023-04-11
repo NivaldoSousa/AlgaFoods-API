@@ -2,7 +2,7 @@ package com.algaworks.algafood.core.modelmapper;
 
 import com.algaworks.algafood.api.v1.model.EnderecoModel;
 import com.algaworks.algafood.api.v1.model.input.ItemPedidoInput;
-import com.algaworks.algafood.api.v2.model.CidadeModelV2;
+import com.algaworks.algafood.api.v2.model.input.CidadeInputV2;
 import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.model.Endereco;
 import com.algaworks.algafood.domain.model.ItemPedido;
@@ -19,7 +19,7 @@ public class ModelMapperConfig {
         var modelMapper = new ModelMapper();
 
         //Na transformação ele ignora o valor do id do objeto CidadeModelV2, para que não seja atribuido ao id do objeto Cidade
-        modelMapper.createTypeMap(CidadeModelV2.class, Cidade.class).addMappings(mapper -> mapper.skip(Cidade::setId));
+        modelMapper.createTypeMap(CidadeInputV2.class, Cidade.class).addMappings(mapper -> mapper.skip(Cidade::setId));
 
         /**
          * esse trecho faz com que vc consiga fazer o de/para com um atributo especifico
