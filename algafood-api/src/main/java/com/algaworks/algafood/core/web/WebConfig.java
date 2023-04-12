@@ -1,9 +1,11 @@
 package com.algaworks.algafood.core.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Filter;
@@ -14,6 +16,9 @@ import javax.servlet.Filter;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    @Autowired
+    private ApiDeprecationHandler apiDeprecationHandler;
+
     /*
      * Habilita o CORS globalmente no projeto
      * */
@@ -23,6 +28,11 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("*"); // Habilita os tipos de metodos que serão liberados ex: POST, GET, PUT
                // .allowedOrigins("*") // Habilita url
 
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(apiDeprecationHandler);
     }
 
     /*
