@@ -5,6 +5,10 @@ import com.algaworks.algafood.api.v1.model.*;
 import com.algaworks.algafood.api.v1.model.input.PedidoResumoModel;
 import com.algaworks.algafood.api.v1.model.input.PermissaoModel;
 import com.algaworks.algafood.api.v1.openapi.model.*;
+import com.algaworks.algafood.api.v2.model.CidadeModelV2;
+import com.algaworks.algafood.api.v2.model.CozinhaModelV2;
+import com.algaworks.algafood.api.v2.openapi.model.CidadesModelV2OpenApi;
+import com.algaworks.algafood.api.v2.openapi.model.CozinhasModelV2OpenApi;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +26,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.AlternateTypeRules;
@@ -54,13 +59,15 @@ public class SpringFoxConfig implements WebMvcConfigurer { //essa interface WebM
      *
      * */
     @Bean
-    public Docket apiDocket() {
+    public Docket apiDocketV1() {
 
         var typeResolver = new TypeResolver();
 
         return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("V1")
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.algaworks.algafood.api")) //Seleciona qual parte do projeto irá ser escaneado para gerar as definições, RequestHandlerSelectors.basePackage() estamos dizendo para ele escanear somente esse pacote.
+                .paths(PathSelectors.ant("/v1/**")) // filtra os paths dos controladores para serem exibidos no swagger apenas aqueles que começam com "/v1/"
                 .build()
                 .useDefaultResponseMessages(false) // retira os status de erro padrão da documentação
                 .globalResponseMessage(RequestMethod.GET, globalGetResponseMessages()) // criar de forma global a resposta da API para todos os metodos GET
@@ -105,7 +112,7 @@ public class SpringFoxConfig implements WebMvcConfigurer { //essa interface WebM
                         typeResolver.resolve(CollectionModel.class, UsuarioModel.class),
                         UsuariosModelOpenApi.class))
 
-                .apiInfo(apiInfo())
+                .apiInfo(apiInfoV1())
                 .tags(new Tag("Cidades", "Gerencia as cidades"), // passando as informações apartir do metodo apiInfo()
                         new Tag("Grupos", "Gerencia os grupos de usuários"),
                         new Tag("Cozinhas", "Gerencia as cozinhas"),
@@ -117,6 +124,44 @@ public class SpringFoxConfig implements WebMvcConfigurer { //essa interface WebM
                         new Tag("Usuários", "Gerencia os usuários"),
                         new Tag("Estatísticas", "Estatísticas da AlgaFood"),
                         new Tag("Permissões", "Gerencia as permissões"));
+    }
+
+    /*
+     * Esse metodo retorna um Docket
+     * Docket é uma classe do springFox que representa a configuração da API para gerar definição da especificação OpenAPI
+     * ou seja estamos configurando um conjunto de serviços que deve ser documentado.
+     *
+     * */
+    @Bean
+    public Docket apiDocketV2() {
+
+        var typeResolver = new TypeResolver();
+
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("V2")
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.algaworks.algafood.api")) //Seleciona qual parte do projeto irá ser escaneado para gerar as definições, RequestHandlerSelectors.basePackage() estamos dizendo para ele escanear somente esse pacote.
+                .paths(PathSelectors.ant("/v2/**")) // filtra os paths dos controladores para serem exibidos no swagger apenas aqueles que começam com "/v1/"
+                .build()
+                .useDefaultResponseMessages(false) // retira os status de erro padrão da documentação
+                .globalResponseMessage(RequestMethod.GET, globalGetResponseMessages()) // criar de forma global a resposta da API para todos os metodos GET
+                .globalResponseMessage(RequestMethod.POST, globalPostPutResponseMessages()) // criar de forma global a resposta da API para todos os metodos POST
+                .globalResponseMessage(RequestMethod.PUT, globalPostPutResponseMessages()) // criar de forma global a resposta da API para todos os metodos PUT
+                .globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages()) // criar de forma global a resposta da API para todos os metodos DELETE
+                .additionalModels(typeResolver.resolve(Problem.class)) // adiciona um model extra nas configurações do swagger
+                .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,  // Ignora a classe que está sendo tipada pelo controller na documentação
+                        Resource.class, File.class, InputStream.class)
+                .directModelSubstitute(Pageable.class, PageableModelOpenApi.class) // esse metodo substitui a classe original pela classe especificada, isso é com a finlaidade apenas para a documentação
+                .directModelSubstitute(Links.class, LinksModelOpenApi.class)
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(PagedModel.class, CozinhaModelV2.class),
+                        CozinhasModelV2OpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, CidadeModelV2.class),
+                        CidadesModelV2OpenApi.class))
+                .apiInfo(apiInfoV2())
+                .tags(new Tag("Cidades", "Gerencia as cidades"),
+                        new Tag("Cozinhas", "Gerencia as cozinhas"));
     }
 
     /*
@@ -181,7 +226,7 @@ public class SpringFoxConfig implements WebMvcConfigurer { //essa interface WebM
     /*
     * Descreve informações da API na documentação, ou seja, na interafce grafica do swagger
     * */
-    public ApiInfo apiInfo(){
+    public ApiInfo apiInfoV1(){
 
         return new ApiInfoBuilder()
                 .title("AlgaFood API")
@@ -190,6 +235,20 @@ public class SpringFoxConfig implements WebMvcConfigurer { //essa interface WebM
                 .contact(new Contact("AlgaWorks", "https://www.algaworks.com", "contato@algaworks.com"))
                 .build();
     }
+
+    /*
+     * Descreve informações da API na documentação, ou seja, na interafce grafica do swagger
+     * */
+    public ApiInfo apiInfoV2(){
+
+        return new ApiInfoBuilder()
+                .title("AlgaFood API")
+                .description("API aberta para clientes e restaurantes")
+                .version("2")
+                .contact(new Contact("AlgaWorks", "https://www.algaworks.com", "contato@algaworks.com"))
+                .build();
+    }
+
     /*
      * Mapeamento de caminhos para servir arquivos estáticos do swagger
      *

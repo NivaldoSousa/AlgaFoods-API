@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.v2.model;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,8 @@ import org.springframework.hateoas.server.core.Relation;
 * RepresentationModel é um container para coleção de links, onde existe metodos de adições de links
 *
 * */
+
+@ApiModel("CidadeModel")
 @Relation(collectionRelation = "cidades")
 @Setter
 @Getter
