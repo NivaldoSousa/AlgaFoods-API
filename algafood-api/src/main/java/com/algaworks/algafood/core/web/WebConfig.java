@@ -17,7 +17,7 @@ import javax.servlet.Filter;
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
-    private ApiDeprecationHandler apiDeprecationHandler;
+    private ApiRetirementHandler apiDeprecationHandler;
 
     /*
      * Habilita o CORS globalmente no projeto
