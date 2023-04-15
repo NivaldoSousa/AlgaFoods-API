@@ -7,6 +7,7 @@ import com.algaworks.algafood.domain.exception.NegocioException;
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
 //essa anotaçao diz que esse componente sera o ponto central para todo os tratamento de exception que possouem a anotaçao @ExceptionHandler
 //tornando assim uma classe de tratamento global.
 @ControllerAdvice
+@Slf4j
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	public static final String MSG_ERRO_GENERICA_USUARIO_FINAL = "Ocorreu um erro interno inesperado no sistema. "
@@ -227,13 +229,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
 		String detail = MSG_ERRO_GENERICA_USUARIO_FINAL;
 
-		// Importante colocar o printStackTrace (pelo menos por enquanto, que não
-		// estamos
-		// fazendo logging) para mostrar a stacktrace no console
-		// Se não fizer isso, você não vai ver a stacktrace de exceptions que seriam
-		// importantes
-		// para você durante, especialmente na fase de desenvolvimento
-		ex.printStackTrace();
+		log.error(ex.getMessage(), ex);
 
 		Problem problem = createProblemBuilder(status, problemType, detail).build();
 
