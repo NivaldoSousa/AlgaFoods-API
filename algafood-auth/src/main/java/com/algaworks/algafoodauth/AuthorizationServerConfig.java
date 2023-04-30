@@ -31,7 +31,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .secret(passwordEncoder.encode("web123"))
                 .authorizedGrantTypes("password", "refresh_token") // tipo de fluxo que esse client ira usar
                 .scopes("write", "read")
-                .accessTokenValiditySeconds(60 * 60 * 6) // tempo de expiração do token, nesse exemplo ele vai expirar em 6h. Padrão é 12h
+                .accessTokenValiditySeconds(6 * 60 * 60) // tempo de expiração do access token, nesse exemplo ele vai expirar em 6h. Padrão é 12h
+                .refreshTokenValiditySeconds(8 * 60 * 60) // tempo de expiração do refresh token, nesse exemplo ele vai expirar em 8h. Padrão é 30 dias
                 .and()
                 .withClient("checktoken")
                 .secret(passwordEncoder.encode("check123"));
@@ -46,6 +47,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager)
-                .userDetailsService(userDetailsService);
+                .userDetailsService(userDetailsService) // necessário para utilizar o refresh token
+                .reuseRefreshTokens(false); // não permitir utilizar o refresh token mais de um vez
     }
 }
