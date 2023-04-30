@@ -16,6 +16,7 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
+                .cors().and() // Necessario habilitar o CORS quando add spring-security na aplicação
                 .oauth2ResourceServer().opaqueToken();
     }
 }

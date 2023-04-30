@@ -33,6 +33,20 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .scopes("write", "read")
                 .accessTokenValiditySeconds(6 * 60 * 60) // tempo de expiração do access token, nesse exemplo ele vai expirar em 6h. Padrão é 12h
                 .refreshTokenValiditySeconds(8 * 60 * 60) // tempo de expiração do refresh token, nesse exemplo ele vai expirar em 8h. Padrão é 30 dias
+
+                .and()
+                .withClient("foodnanalytics")
+                .secret(passwordEncoder.encode("food123"))
+                .authorizedGrantTypes("authorization_code") // tipo de fluxo que esse client ira usar
+                .scopes("write", "read")
+                .redirectUris("http://aplicacao-cliente") // URL que precisa ser cadastrada no fluxo Authorization Code Grant
+
+                .and()
+                .withClient("faturamento")
+                .secret(passwordEncoder.encode("faturamento123"))
+                .authorizedGrantTypes("client_credentials") // tipo de fluxo que esse client ira usar
+                .scopes("read")
+
                 .and()
                 .withClient("checktoken")
                 .secret(passwordEncoder.encode("check123"));
