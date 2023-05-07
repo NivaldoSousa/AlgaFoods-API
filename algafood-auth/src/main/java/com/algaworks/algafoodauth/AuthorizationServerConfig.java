@@ -10,9 +10,14 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.CompositeTokenGranter;
+import org.springframework.security.oauth2.provider.TokenGranter;
+
+import java.util.Arrays;
 
 @Configuration
-@EnableAuthorizationServer // estamos habilitando o AuthorizationServer nesse projeto que seria por exemplo os endpoint como /token, /auth
+@EnableAuthorizationServer
+// estamos habilitando o AuthorizationServer nesse projeto que seria por exemplo os endpoint como /token, /auth
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
@@ -69,6 +74,21 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService) // necessário para utilizar o refresh token
-                .reuseRefreshTokens(false); // não permitir utilizar o refresh token mais de um vez
+                .reuseRefreshTokens(false) // não permitir utilizar o refresh token mais de um vez
+                .tokenGranter(tokenGranter(endpoints));
+    }
+
+    /*
+    * Retorna uma instancia de tokenGranter com PKCE
+    * */
+    private TokenGranter tokenGranter(AuthorizationServerEndpointsConfigurer endpoints) {
+        var pkceAuthorizationCodeTokenGranter = new PkceAuthorizationCodeTokenGranter(endpoints.getTokenServices(),
+                endpoints.getAuthorizationCodeServices(), endpoints.getClientDetailsService(),
+                endpoints.getOAuth2RequestFactory());
+
+        var granters = Arrays.asList(
+                pkceAuthorizationCodeTokenGranter, endpoints.getTokenGranter());
+
+        return new CompositeTokenGranter(granters);
     }
 }
