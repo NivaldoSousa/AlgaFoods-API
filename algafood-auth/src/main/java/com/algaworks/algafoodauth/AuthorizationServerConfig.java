@@ -1,8 +1,8 @@
 package com.algaworks.algafoodauth;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,8 +13,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 import java.util.Arrays;
 
@@ -31,9 +30,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Autowired
     private UserDetailsService userDetailsService;
-
-    @Autowired
-    private RedisConnectionFactory redisConnectionFactory;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -64,10 +60,20 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authorizedGrantTypes("implicit") // tipo de fluxo que esse client ira usar
                 .scopes("write", "read")
                 .redirectUris("http://aplicacao-cliente") // URL que precisa ser cadastrada no fluxo Implicit Grant
-
                 .and()
                 .withClient("checktoken")
                 .secret(passwordEncoder.encode("check123"));
+    }
+
+    /*
+    * A Classe JwtAccessTokenConverter converte as informações do usuário logado em JWT, vice e versa
+    */
+    @Bean
+    public JwtAccessTokenConverter jwtAccessTokenConverter(){
+        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+        jwtAccessTokenConverter.setSigningKey("algaworks"); //Chave secreta utilizada para decodificar o token e asssim gerar novos Token de Acesso
+
+        return jwtAccessTokenConverter;
     }
 
     @Override
@@ -81,12 +87,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpoints.authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService) // necessário para utilizar o refresh token
                 .reuseRefreshTokens(false) // não permitir utilizar o refresh token mais de um vez
-                .tokenStore(redisTokenStore())
+                .accessTokenConverter(jwtAccessTokenConverter()) // Configuramos o conversor de Access Token em JWT
                 .tokenGranter(tokenGranter(endpoints));
-    }
-
-    private TokenStore redisTokenStore(){
-        return new RedisTokenStore(redisConnectionFactory);
     }
 
     /*
