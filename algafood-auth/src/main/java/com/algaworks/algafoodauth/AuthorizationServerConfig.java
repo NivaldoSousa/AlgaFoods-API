@@ -3,6 +3,7 @@ package com.algaworks.algafoodauth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +15,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 import java.util.Arrays;
 
@@ -30,6 +32,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtKeyStoreProperties jwtKeyStoreProperties;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -70,8 +75,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     */
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter(){
-        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-        jwtAccessTokenConverter.setSigningKey("hdkjfsjkfhkjshfsfhhfshfshfhshfuishfishifhsihfishuf"); //Chave secreta utilizada para decodificar o token e asssim gerar novos Token de Acesso
+        var jwtAccessTokenConverter = new JwtAccessTokenConverter();
+        //jwtAccessTokenConverter.setSigningKey("hdkjfsjkfhkjshfsfhhfshfshfhshfuishfishifhsihfishuf"); //Chave secreta utilizada para decodificar o token e asssim gerar novos Token de Acesso
+
+        var jksResource = new ClassPathResource(jwtKeyStoreProperties.getPath());
+        var keyStorePass = jwtKeyStoreProperties.getPassword();; // senha para acessar o arquivo jks
+        var keyPairAlias = jwtKeyStoreProperties.getKeypairAlias(); // idetificador do par da chave
+
+        var keyStoreKeyFactoty = new KeyStoreKeyFactory(jksResource, keyStorePass.toCharArray()); //obtem as informações do arquivo
+        var keyPair = keyStoreKeyFactoty.getKeyPair(keyPairAlias); // obtem o valor da chave pelo idetificador do par da chave
+
+        jwtAccessTokenConverter.setKeyPair(keyPair);
 
         return jwtAccessTokenConverter;
     }
@@ -79,7 +93,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         //security.checkTokenAccess("isAuthenticated()"); //permitir usar o endpoint oauth/check_token informando os dados do client
-        security.checkTokenAccess("permitAll()"); //permitir usar o endpoint oauth/check_token sem a necessidade de informar os dados do client
+        security.checkTokenAccess("permitAll()") //permitir usar o endpoint oauth/check_token sem a necessidade de informar os dados do client
+                .tokenKeyAccess("permitAll()") // permitindo todos acesso apartir da url tokenKey
+                .allowFormAuthenticationForClients();
     }
 
     @Override
