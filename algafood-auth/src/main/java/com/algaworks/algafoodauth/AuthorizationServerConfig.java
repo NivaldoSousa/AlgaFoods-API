@@ -14,6 +14,9 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
+import org.springframework.security.oauth2.provider.approval.ApprovalStore;
+import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
@@ -104,7 +107,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .userDetailsService(userDetailsService) // necessário para utilizar o refresh token
                 .reuseRefreshTokens(false) // não permitir utilizar o refresh token mais de um vez
                 .accessTokenConverter(jwtAccessTokenConverter()) // Configuramos o conversor de Access Token em JWT
+                .approvalStore(approvalStore(endpoints.getTokenStore()))
                 .tokenGranter(tokenGranter(endpoints));
+    }
+
+    /*
+    * Habilitar na tela de autorização as opções de permissao do escopo, por exemplo, leitura e escrita
+    * de acesso aos recursos do Resource Server.
+    * */
+    private ApprovalStore approvalStore(TokenStore tokenStore) {
+        var approvalStore = new TokenApprovalStore();
+        approvalStore.setTokenStore(tokenStore);
+
+        return approvalStore;
     }
 
     /*
