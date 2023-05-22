@@ -1,4 +1,4 @@
-package com.algaworks.algafoodauth;
+package com.algaworks.algafoodauth.core;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
