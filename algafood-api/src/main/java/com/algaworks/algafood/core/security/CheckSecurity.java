@@ -20,7 +20,7 @@ public @interface CheckSecurity {
          * Anotação responsavel por encapsular a anotação @PreAuthorize("isAuthenticated()")
          * com isso mantemos nosso codigo mais legivel e melhor para manuntenção
          * */
-        @PreAuthorize("isAuthenticated()") // Com essa anotação é possivel restrigir o acesso aos endpoints atarves de uma expressão, nesse caso o usuario poderar acessa o recurso somente autenticado
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()") // Com essa anotação é possivel restrigir o acesso aos endpoints atarves de uma expressão, nesse caso o usuario poderar acessa o recurso somente autenticado
         @Retention(RetentionPolicy.RUNTIME) // Essa anootação vai ser lida em tempo de execução
         @Target(ElementType.METHOD) // Essa anotação vai ser usada em metodos
         public @interface PodeConsultar {
@@ -30,7 +30,7 @@ public @interface CheckSecurity {
          * Anotação responsavel por encapsular a anotação @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
          * com isso mantemos nosso codigo mais legivel e melhor para manuntenção
          * */
-        @PreAuthorize("hasAuthority('EDITAR_COZINHAS')") // Aqui utilizamos a expressão hasAuthority passando a permissão que o usuario deverá ter, somente ela poderar ser permitido a esse recurso
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_COZINHAS')") // Aqui utilizamos a expressão hasAuthority passando a permissão que o usuario deverá ter, somente ela poderar ser permitido a esse recurso
         @Retention(RetentionPolicy.RUNTIME) // Essa anootação vai ser lida em tempo de execução
         @Target(ElementType.METHOD) // Essa anotação vai ser usada em metodos
         public @interface PodeEditar {

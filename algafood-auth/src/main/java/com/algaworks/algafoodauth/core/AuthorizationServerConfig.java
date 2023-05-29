@@ -46,7 +46,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .withClient("algafood-web") // novo client
                 .secret(passwordEncoder.encode("web123"))
                 .authorizedGrantTypes("password", "refresh_token") // tipo de fluxo que esse client ira usar
-                .scopes("write", "read")
+                .scopes("WRITE", "READ")
                 .accessTokenValiditySeconds(6 * 60 * 60) // tempo de expiração do access token, nesse exemplo ele vai expirar em 6h. Padrão é 12h
                 .refreshTokenValiditySeconds(8 * 60 * 60) // tempo de expiração do refresh token, nesse exemplo ele vai expirar em 8h. Padrão é 30 dias
 
@@ -54,20 +54,20 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .withClient("foodnanalytics") // novo client
                 .secret(passwordEncoder.encode("food123"))
                 .authorizedGrantTypes("authorization_code") // tipo de fluxo que esse client ira usar
-                .scopes("write", "read")
+                .scopes("WRITE", "READ")
                 .redirectUris("http://aplicacao-cliente") // URL que precisa ser cadastrada no fluxo Authorization Code Grant
 
                 .and()
                 .withClient("faturamento") // novo client
                 .secret(passwordEncoder.encode("faturamento123"))
                 .authorizedGrantTypes("client_credentials") // tipo de fluxo que esse client ira usar
-                .scopes("read")
+                .scopes("READ")
 
                 //Configurando o fluxo Implicit Grant (Esse fluxo não é recomendado o seu uso)
                 .and()
                 .withClient("webadmin") // novo client
                 .authorizedGrantTypes("implicit") // tipo de fluxo que esse client ira usar
-                .scopes("write", "read")
+                .scopes("WRITE", "READ")
                 .redirectUris("http://aplicacao-cliente") // URL que precisa ser cadastrada no fluxo Implicit Grant
                 .and()
                 .withClient("checktoken")
