@@ -4,6 +4,7 @@ import com.algaworks.algafood.api.v1.assembler.FotoProdutoModelAssembler;
 import com.algaworks.algafood.api.v1.model.FotoProdutoModel;
 import com.algaworks.algafood.api.v1.model.input.FotoProdutoInput;
 import com.algaworks.algafood.api.v1.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.FotoProduto;
 import com.algaworks.algafood.domain.model.Produto;
@@ -46,6 +47,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     /*
      * consumes -> desta forma o metodo esta apenas mapeado para o content-type MultipartFile
      * */
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId,
                                           @Valid FotoProdutoInput fotoProdutoInput,
@@ -112,6 +114,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CheckSecurity.Restaurantes.PodeEditar
     public void excluir(@PathVariable Long restauranteId,
                         @PathVariable Long produtoId) {
         catalogoFotoProdutoService.excluir(restauranteId, produtoId);

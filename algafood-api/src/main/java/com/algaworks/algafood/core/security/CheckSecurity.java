@@ -36,4 +36,21 @@ public @interface CheckSecurity {
         public @interface PodeEditar {
         }
     }
+
+    /*
+     * Responsavel pelas anotações de restrição do grupo de Restaurantes
+     * */
+    public @interface Restaurantes {
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_RESTAURANTES')")
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface PodeEditar { }
+
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface PodeConsultar { }
+
+    }
 }
