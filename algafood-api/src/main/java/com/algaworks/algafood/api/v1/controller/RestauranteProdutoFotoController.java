@@ -47,7 +47,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     /*
      * consumes -> desta forma o metodo esta apenas mapeado para o content-type MultipartFile
      * */
-    @CheckSecurity.Restaurantes.PodeEditar
+    @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId,
                                           @Valid FotoProdutoInput fotoProdutoInput,
@@ -114,7 +114,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckSecurity.Restaurantes.PodeEditar
+    @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     public void excluir(@PathVariable Long restauranteId,
                         @PathVariable Long produtoId) {
         catalogoFotoProdutoService.excluir(restauranteId, produtoId);
