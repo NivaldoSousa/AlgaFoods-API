@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -21,15 +20,13 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
+import javax.sql.DataSource;
 import java.util.Arrays;
 
 @Configuration
 @EnableAuthorizationServer
 // estamos habilitando o AuthorizationServer nesse projeto que seria por exemplo os endpoint como /token, /auth
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -40,38 +37,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private JwtKeyStoreProperties jwtKeyStoreProperties;
 
+    @Autowired
+    private DataSource dataSource;
+
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
-                .withClient("algafood-web") // novo client
-                .secret(passwordEncoder.encode("web123"))
-                .authorizedGrantTypes("password", "refresh_token") // tipo de fluxo que esse client ira usar
-                .scopes("WRITE", "READ")
-                .accessTokenValiditySeconds(6 * 60 * 60) // tempo de expiração do access token, nesse exemplo ele vai expirar em 6h. Padrão é 12h
-                .refreshTokenValiditySeconds(8 * 60 * 60) // tempo de expiração do refresh token, nesse exemplo ele vai expirar em 8h. Padrão é 30 dias
-
-                .and()
-                .withClient("foodnanalytics") // novo client
-                .secret(passwordEncoder.encode("food123"))
-                .authorizedGrantTypes("authorization_code") // tipo de fluxo que esse client ira usar
-                .scopes("WRITE", "READ")
-                .redirectUris("http://aplicacao-cliente") // URL que precisa ser cadastrada no fluxo Authorization Code Grant
-
-                .and()
-                .withClient("faturamento") // novo client
-                .secret(passwordEncoder.encode("faturamento123"))
-                .authorizedGrantTypes("client_credentials") // tipo de fluxo que esse client ira usar
-                .scopes("READ")
-
-                //Configurando o fluxo Implicit Grant (Esse fluxo não é recomendado o seu uso)
-                .and()
-                .withClient("webadmin") // novo client
-                .authorizedGrantTypes("implicit") // tipo de fluxo que esse client ira usar
-                .scopes("WRITE", "READ")
-                .redirectUris("http://aplicacao-cliente") // URL que precisa ser cadastrada no fluxo Implicit Grant
-                .and()
-                .withClient("checktoken")
-                .secret(passwordEncoder.encode("check123"));
+        clients.jdbc(dataSource); // Irá da permissão(token) ao client caso ela seja cadastrado no banco de dados
     }
 
     /*
