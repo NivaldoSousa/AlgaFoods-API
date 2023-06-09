@@ -1,5 +1,6 @@
 package com.algaworks.algafood.core.security;
 
+import com.algaworks.algafood.domain.repository.PedidoRepository;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,9 @@ public class AlgaSecurity {
 
     @Autowired
     private RestauranteRepository restauranteRepository;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
 
     /*
      * Retorna o Token da requisição
@@ -33,6 +37,17 @@ public class AlgaSecurity {
      * Verifica se o usuario da requisição é dono do resturante
      * */
     public boolean gerenciaRestaurante(Long restauranteId) {
+        if (restauranteId == null) {
+            return false;
+        }
+
         return restauranteRepository.existsResponsavel(restauranteId, this.getUsuarioId());
+    }
+
+    /*
+    * Verifica se o pedido pode ser gerenciado pelo usuario
+    * */
+    public boolean gerenciaRestauranteDoPedido(String codigoPedido) {
+        return pedidoRepository.isPedidoGerenciadoPor(codigoPedido, getUsuarioId());
     }
 }

@@ -57,16 +57,9 @@ public class PedidoController implements PedidoControllerOpenApi {
     @Autowired
     private AlgaSecurity algaSecurity;
 
-    @CheckSecurity.Pedidos.PodeBuscar
-    @GetMapping("/{codigoPedido}")
-    public PedidoModel buscar(@PathVariable String codigoPedido) {
-        Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
-
-        return pedidoModelAssembler.toModel(pedido);
-    }
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @CheckSecurity.Pedidos.PodeCriar
     public PedidoModel adicionar(@Valid @RequestBody PedidoInput pedidoInput) {
         try {
             Pedido novoPedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
@@ -82,6 +75,14 @@ public class PedidoController implements PedidoControllerOpenApi {
         }
     }
 
+    @GetMapping("/{codigoPedido}")
+    @CheckSecurity.Pedidos.PodeBuscar
+    public PedidoModel buscar(@PathVariable String codigoPedido) {
+        Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
+
+        return pedidoModelAssembler.toModel(pedido);
+    }
+
     /*
      * Pageable - paginação, seria o numero da pagina
      * param -> PedidoFilter filtro de pesquisa customizada
@@ -90,6 +91,7 @@ public class PedidoController implements PedidoControllerOpenApi {
      * */
     @Override
     @GetMapping
+    @CheckSecurity.Pedidos.PodePesquisar
     public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
 
        Pageable pageableTraduzido = traduzirPageable(pageable);
