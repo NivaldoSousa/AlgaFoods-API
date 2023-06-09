@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.v1.controller;
 
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.openapi.controller.EstatisticasControllerOpenApi;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.filter.VendaDiariaFilter;
 import com.algaworks.algafood.domain.model.dto.VendaDiaria;
 import com.algaworks.algafood.domain.service.VendaQueryService;
@@ -35,6 +36,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
     }
 
     @GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CheckSecurity.Estatisticas.PodeConsultar
     public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filtro, @RequestParam(required = false, defaultValue = "+00:00") String timeOffset) {
         return vendaQueryService.consultarVendasDiarias(filtro, timeOffset);
     }
@@ -45,6 +47,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
     * diferencia quando o usario especificar o accept informando o tipo de resposta da chamada
     * */
     @GetMapping(path = "/v1/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
+    @CheckSecurity.Estatisticas.PodeConsultar
     public ResponseEntity<byte []> consultarVendasDiariasPdf(VendaDiariaFilter filtro, @RequestParam(required = false, defaultValue = "+00:00") String timeOffset) {
 
         byte[] bytesPdf = vendaReportService.emitirVendasDiarias(filtro, timeOffset);
@@ -57,6 +60,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
 
     @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @CheckSecurity.Estatisticas.PodeConsultar
     public EstatisticasModel estatisticas() {
         var estatisticasModel = new EstatisticasModel();
 

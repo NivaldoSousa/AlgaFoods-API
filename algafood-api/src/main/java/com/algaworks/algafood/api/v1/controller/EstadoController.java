@@ -5,6 +5,7 @@ import com.algaworks.algafood.api.v1.assembler.EstadoModelAssembler;
 import com.algaworks.algafood.api.v1.model.EstadoModel;
 import com.algaworks.algafood.api.v1.model.input.EstadoInput;
 import com.algaworks.algafood.api.v1.openapi.controller.EstadoControllerOpenApi;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.repository.EstadoRepository;
 import com.algaworks.algafood.domain.service.CadastroEstadoService;
@@ -36,6 +37,7 @@ public class EstadoController implements EstadoControllerOpenApi {
 
 	@Override
 	@GetMapping
+	@CheckSecurity.Estados.PodeConsultar
 	public CollectionModel<EstadoModel> listar() {
 		List<Estado> todosEstados = estadoRepository.findAll();
 
@@ -43,6 +45,7 @@ public class EstadoController implements EstadoControllerOpenApi {
 	}
 
 	@GetMapping("/{estadoId}")
+	@CheckSecurity.Estados.PodeConsultar
 	public EstadoModel buscar(@PathVariable Long estadoId) {
 		Estado estado = cadastroEstado.buscarOuFalhar(estadoId);
 		return estadoModelAssembler.toModel(estado);
@@ -50,6 +53,7 @@ public class EstadoController implements EstadoControllerOpenApi {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
+	@CheckSecurity.Estados.PodeEditar
 	public EstadoModel adicionar(@RequestBody @Valid EstadoInput estadoInput) {
 		Estado estado = estadoInputDisassembler.toDomainObject(estadoInput);
 		estado = cadastroEstado.salvar(estado);
@@ -58,6 +62,7 @@ public class EstadoController implements EstadoControllerOpenApi {
 	}
 
 	@PutMapping("/{estadoId}")
+	@CheckSecurity.Estados.PodeEditar
 	public Estado atualizar(@PathVariable Long estadoId, @RequestBody @Valid Estado estado) {
 		Estado estadoAtual = cadastroEstado.buscarOuFalhar(estadoId);
 		BeanUtils.copyProperties(estado, estadoAtual, "id");
@@ -66,6 +71,7 @@ public class EstadoController implements EstadoControllerOpenApi {
 	}
 
 	@DeleteMapping("/{estadoId}")
+	@CheckSecurity.Estados.PodeEditar
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long estadoId) {
 		cadastroEstado.excluir(estadoId);

@@ -7,6 +7,7 @@ import com.algaworks.algafood.api.v1.assembler.CidadeModelAssembler;
 import com.algaworks.algafood.api.v1.model.CidadeModel;
 import com.algaworks.algafood.api.v1.model.input.CidadeInput;
 import com.algaworks.algafood.api.v1.openapi.controller.CidadeControllerOpenApi;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Cidade;
@@ -38,6 +39,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     private CidadeInputDisassembler cidadeInputDisassembler;
 
     @GetMapping
+    @CheckSecurity.Cidades.PodeConsultar
     public CollectionModel<CidadeModel> listar() {
 
         List<Cidade> todasCidades = cidadeRepository.findAll();
@@ -46,6 +48,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     }
 
     @GetMapping("/{cidadeId}")
+    @CheckSecurity.Cidades.PodeConsultar
     public CidadeModel buscar(@PathVariable Long cidadeId) {
 
         Cidade cidade = cadastroCidade.buscarOuFalhar(cidadeId);
@@ -55,6 +58,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @CheckSecurity.Cidades.PodeEditar
     public CidadeModel adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
 
         try {
@@ -74,6 +78,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     }
 
     @PutMapping("/{cidadeId}")
+    @CheckSecurity.Cidades.PodeEditar
     public CidadeModel atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeInput cidadeInput) {
 
         try {
@@ -91,6 +96,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CheckSecurity.Cidades.PodeEditar
     public void remover(@PathVariable Long cidadeId) {
 
         cadastroCidade.excluir(cidadeId);
