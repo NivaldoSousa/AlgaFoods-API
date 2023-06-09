@@ -30,8 +30,8 @@ public class AlgaSecurity {
     }
 
     /*
-    * Verifica se o usuario da requisição é dono do resturante
-    * */
+     * Verifica se o usuario da requisição é dono do resturante
+     * */
     public boolean gerenciaRestaurante(Long restauranteId) {
         return restauranteRepository.existsResponsavel(restauranteId, this.getUsuarioId());
     }
