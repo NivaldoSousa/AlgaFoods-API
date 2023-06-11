@@ -25,17 +25,12 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.builders.*;
 import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.schema.ModelRef;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.service.ResponseMessage;
-import springfox.documentation.service.Tag;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -112,6 +107,9 @@ public class SpringFoxConfig implements WebMvcConfigurer { //essa interface WebM
                         typeResolver.resolve(CollectionModel.class, UsuarioModel.class),
                         UsuariosModelOpenApi.class))
 
+                .securitySchemes(Arrays.asList(this.securityScheme()))
+                .securityContexts(Arrays.asList(this.securityContext()))
+
                 .apiInfo(apiInfoV1())
                 .tags(new Tag("Cidades", "Gerencia as cidades"), // passando as informações apartir do metodo apiInfo()
                         new Tag("Grupos", "Gerencia os grupos de usuários"),
@@ -162,6 +160,35 @@ public class SpringFoxConfig implements WebMvcConfigurer { //essa interface WebM
                 .apiInfo(apiInfoV2())
                 .tags(new Tag("Cidades", "Gerencia as cidades"),
                         new Tag("Cozinhas", "Gerencia as cozinhas"));
+    }
+
+    private SecurityScheme securityScheme() {
+        return new OAuthBuilder()
+                .name("AlgaFood")
+                .grantTypes(this.grantTypes())
+                .scopes(this.scopes())
+                .build();
+    }
+
+    private List<GrantType> grantTypes() {
+        return Arrays.asList(new ResourceOwnerPasswordCredentialsGrant("/oauth/token"));
+    }
+
+    private List<AuthorizationScope> scopes(){
+        return Arrays.asList(new AuthorizationScope("READ", "Acesso de leitura"),
+                new AuthorizationScope("WRITE", "Acesso de escrita"));
+    }
+
+    private SecurityContext securityContext(){
+        var securityReference = SecurityReference.builder()
+                .reference("AlgaFood")
+                .scopes(scopes().toArray(new AuthorizationScope[0]))
+                .build();
+
+        return SecurityContext.builder()
+                .securityReferences(Arrays.asList(securityReference))
+                .forPaths(PathSelectors.any())
+                .build();
     }
 
     /*
