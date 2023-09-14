@@ -23,12 +23,21 @@ services:
     command: ["/wait-for-it.sh", "-t", "30", "algafood-mysql:3307", "--", "java", "-jar", "api.jar"] #Responsvel por executar comandos no momento da inicialização do container
     environment: #Definindo uma variavel de ambiente
       DB_HOST: algafood-mysql
-    ports: #Porta que será usada pelo container
-      - "8080:8080"
     networks: #Nome da rede que o container irá utilizar
       - algafood-network #Estamos utilizando a rede que criamos na chave networks
     depends_on: #Estamos difinindo que esse container depende do container do banco de dados está no ar para ser iniciado
       - algafood-mysql
+
+  algafood-proxy: #Definindo o container do nginx
+    build: ./nginx
+    image: algafood-proxy
+    ports:
+      - "80:80"
+    networks:
+      - algafood-network
+    depends_on:
+      - algafood-api
+
 
 
 
