@@ -18,11 +18,18 @@ services:
     networks: #Nome da rede que o container irá utilizar
       - algafood-network #Estamos utilizando a rede que criamos na chave networks
 
+  algafood-redis: #definindo o nome do container.
+    image: redis:6.2.1-alpine #Nome da imagem docker que será utilizada
+    networks: #Nome da rede que o container irá utilizar
+      - algafood-network #Estamos utilizando a rede que criamos na chave networks
+
   algafood-api: #definindo o nome do container.
     image: algafood-api #Nome da imagem docker que será utilizada, nesse caso nós que iremos criar a imagem
     command: ["/wait-for-it.sh", "-t", "30", "algafood-mysql:3307", "--", "java", "-jar", "api.jar"] #Responsvel por executar comandos no momento da inicialização do container
     environment: #Definindo uma variavel de ambiente
       DB_HOST: algafood-mysql
+      SPRING_SESSION_STORE_TYPE: redis #Habilitando o srping session para se comunicar com o Redis
+      SPRING_REDIS_HOST: algafood-redis #Adicionando o container do Redis para obter o host para se comunicar com a API
     networks: #Nome da rede que o container irá utilizar
       - algafood-network #Estamos utilizando a rede que criamos na chave networks
     depends_on: #Estamos difinindo que esse container depende do container do banco de dados está no ar para ser iniciado
