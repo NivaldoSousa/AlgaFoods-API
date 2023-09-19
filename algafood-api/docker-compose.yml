@@ -30,6 +30,7 @@ services:
       DB_HOST: algafood-mysql
       SPRING_SESSION_STORE_TYPE: redis #Habilitando o srping session para se comunicar com o Redis
       SPRING_REDIS_HOST: algafood-redis #Adicionando o container do Redis para obter o host para se comunicar com a API
+      SPRING_PROFILES_ACTIVE: development #Determinando com profile(application.properties) vai ser usado no momento da execução da API
     networks: #Nome da rede que o container irá utilizar
       - algafood-network #Estamos utilizando a rede que criamos na chave networks
     depends_on: #Estamos difinindo que esse container depende do container do banco de dados está no ar para ser iniciado
