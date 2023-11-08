@@ -21,8 +21,8 @@
 		<jasperreports.functions>6.20.0</jasperreports.functions>
 		<aws-java-sdk-s3.version>1.11.671</aws-java-sdk-s3.version>
 		<springfox.version>2.9.2</springfox.version>
-		<spring-security-oauth2.version>2.3.8.RELEASE</spring-security-oauth2.version>
 		<dockerfile-maven-version>1.4.13</dockerfile-maven-version>
+		<springauthserver.version>0.3.1</springauthserver.version>
 	</properties>
 
 	<dependencies>
@@ -164,24 +164,18 @@
 
 		<dependency>
 			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-authorization-server</artifactId>
+			<version>${springauthserver.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-jwt</artifactId>
-			<version>1.0.11.RELEASE</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.security.oauth</groupId>
-			<artifactId>spring-security-oauth2</artifactId>
-			<version>${spring-security-oauth2.version}</version>
 		</dependency>
 
 		<dependency>
