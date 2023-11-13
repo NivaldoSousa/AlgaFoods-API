@@ -52,7 +52,7 @@ public class AuthorizationServerConfig {
                 .withId("1")
                 .clientId("algafood-backend")
                 .clientSecret(passwordEncoder.encode("backend123"))
-                .clientAuthenticationMethod(ClientAuthenticationMethod.BASIC)
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .scope("READ")
                 .tokenSettings(TokenSettings.builder()

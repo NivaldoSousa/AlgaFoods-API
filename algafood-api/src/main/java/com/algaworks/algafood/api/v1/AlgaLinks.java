@@ -29,7 +29,7 @@ public class AlgaLinks {
 
         String pedidosUrl = WebMvcLinkBuilder.linkTo(PedidoController.class).toUri().toString();
 
-        return new Link(UriTemplate.of(pedidosUrl, PAGINACAO_VARIABLE.concat(filtroVariables)), rel);
+        return Link.of(UriTemplate.of(pedidosUrl, PAGINACAO_VARIABLE.concat(filtroVariables)), rel);
     }
 
     public Link linkToEstatisticasVendasDiarias(String rel) {
@@ -42,7 +42,7 @@ public class AlgaLinks {
         String pedidosUrl = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstatisticasController.class)
                 .consultarVendasDiarias(null, null)).toUri().toString();
 
-        return new Link(UriTemplate.of(pedidosUrl, filtroVariables), rel);
+        return Link.of(UriTemplate.of(pedidosUrl, filtroVariables), rel);
     }
 
     public Link linkToEstatisticas(String rel) {
